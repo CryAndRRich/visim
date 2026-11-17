@@ -1,0 +1,176 @@
+{
+  "bipartite": {
+    "users": 7952,
+    "articles": 1070,
+    "edges": 17807,
+    "user_degree_quantiles": {
+      "0.5": 1.0,
+      "0.9": 4.0,
+      "0.95": 7.0,
+      "0.99": 15.489999999999782
+    },
+    "user_degree_max": 187
+  },
+  "frequent": {
+    "rule": "top 5% by number of articles",
+    "min_articles": 7,
+    "users": 404,
+    "comment_share": 0.3547
+  },
+  "projection": {
+    "min_articles": 2,
+    "nodes": 2778,
+    "edges": 184400,
+    "density": 0.04781
+  },
+  "louvain": {
+    "seed": 42,
+    "communities": 12,
+    "modularity": 0.292,
+    "largest_sizes": [
+      563,
+      462,
+      378,
+      256,
+      228,
+      175,
+      159,
+      129,
+      126,
+      123
+    ],
+    "communities_with_at_least_20_users": 12
+  },
+  "top_communities": [
+    {
+      "community": 0,
+      "users": 563,
+      "comments": 3078,
+      "articles": 661,
+      "category_share": {
+        "phap-luat": 0.402,
+        "the-gioi": 0.254,
+        "thoi-su": 0.183,
+        "giai-tri": 0.083,
+        "kinh-doanh": 0.079
+      }
+    },
+    {
+      "community": 1,
+      "users": 462,
+      "comments": 2883,
+      "articles": 737,
+      "category_share": {
+        "giai-tri": 0.293,
+        "kinh-doanh": 0.253,
+        "thoi-su": 0.221,
+        "phap-luat": 0.139,
+        "the-gioi": 0.094
+      }
+    },
+    {
+      "community": 2,
+      "users": 378,
+      "comments": 2262,
+      "articles": 622,
+      "category_share": {
+        "thoi-su": 0.374,
+        "phap-luat": 0.269,
+        "giai-tri": 0.149,
+        "kinh-doanh": 0.124,
+        "the-gioi": 0.084
+      }
+    },
+    {
+      "community": 3,
+      "users": 256,
+      "comments": 1146,
+      "articles": 374,
+      "category_share": {
+        "thoi-su": 0.469,
+        "phap-luat": 0.231,
+        "the-gioi": 0.106,
+        "giai-tri": 0.099,
+        "kinh-doanh": 0.095
+      }
+    },
+    {
+      "community": 4,
+      "users": 228,
+      "comments": 964,
+      "articles": 337,
+      "category_share": {
+        "thoi-su": 0.566,
+        "kinh-doanh": 0.177,
+        "phap-luat": 0.119,
+        "giai-tri": 0.077,
+        "the-gioi": 0.06
+      }
+    },
+    {
+      "community": 5,
+      "users": 175,
+      "comments": 748,
+      "articles": 271,
+      "category_share": {
+        "kinh-doanh": 0.303,
+        "thoi-su": 0.258,
+        "giai-tri": 0.238,
+        "phap-luat": 0.102,
+        "the-gioi": 0.099
+      }
+    },
+    {
+      "community": 6,
+      "users": 159,
+      "comments": 1027,
+      "articles": 328,
+      "category_share": {
+        "kinh-doanh": 0.388,
+        "thoi-su": 0.252,
+        "phap-luat": 0.184,
+        "giai-tri": 0.113,
+        "the-gioi": 0.063
+      }
+    },
+    {
+      "community": 7,
+      "users": 129,
+      "comments": 784,
+      "articles": 320,
+      "category_share": {
+        "kinh-doanh": 0.329,
+        "phap-luat": 0.269,
+        "thoi-su": 0.198,
+        "the-gioi": 0.114,
+        "giai-tri": 0.091
+      }
+    },
+    {
+      "community": 8,
+      "users": 126,
+      "comments": 636,
+      "articles": 286,
+      "category_share": {
+        "thoi-su": 0.425,
+        "phap-luat": 0.283,
+        "kinh-doanh": 0.118,
+        "the-gioi": 0.093,
+        "giai-tri": 0.082
+      }
+    },
+    {
+      "community": 9,
+      "users": 123,
+      "comments": 397,
+      "articles": 143,
+      "category_share": {
+        "thoi-su": 0.529,
+        "kinh-doanh": 0.287,
+        "the-gioi": 0.086,
+        "phap-luat": 0.058,
+        "giai-tri": 0.04
+      }
+    }
+  ]
+}

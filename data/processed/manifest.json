@@ -1,0 +1,10 @@
+{
+  "created_at": "2026-10-13T13:45:05+00:00",
+  "created_by": "src/processing/snapshot.py",
+  "articles": 1244,
+  "comments": 20468,
+  "article_ids_sha256": "6b2e3b53a0ede122e4601e5200fb136aa850749df04037ee67f0563d55ac8833",
+  "excluded_articles_by_status": {
+    "pending": 173
+  }
+}

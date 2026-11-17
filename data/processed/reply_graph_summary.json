@@ -1,0 +1,100 @@
+{
+  "graph": {
+    "nodes": 4196,
+    "edges": 7091,
+    "replies": 7469,
+    "reciprocity": 0.1444,
+    "largest_wcc_share": 0.9359,
+    "degree_assortativity_in_in": -0.0529,
+    "central_users": {
+      "rule": "top 5% by PageRank",
+      "users": 210,
+      "also_frequent": 95,
+      "jaccard_with_frequent": 0.183
+    },
+    "spearman": {
+      "pagerank~n_comments": 0.3976,
+      "pagerank~replies_received": 0.9541,
+      "hub~replies_sent": 0.7071,
+      "authority~replies_received": 0.7592
+    }
+  },
+  "communities": {
+    "lcc_nodes": 3927,
+    "lcc_edges": 6429,
+    "methods": {
+      "louvain": {
+        "communities": 38,
+        "modularity": 0.6614,
+        "largest_sizes": [
+          229,
+          180,
+          174,
+          170,
+          158,
+          157,
+          150,
+          137,
+          127,
+          126
+        ],
+        "with_at_least_20_users": 38
+      },
+      "label_propagation": {
+        "communities": 833,
+        "modularity": 0.5182,
+        "largest_sizes": [
+          90,
+          77,
+          75,
+          49,
+          43,
+          42,
+          30,
+          29,
+          27,
+          27
+        ],
+        "with_at_least_20_users": 24
+      },
+      "greedy_modularity": {
+        "communities": 37,
+        "modularity": 0.6559,
+        "largest_sizes": [
+          339,
+          298,
+          289,
+          235,
+          230,
+          227,
+          219,
+          217,
+          183,
+          152
+        ],
+        "with_at_least_20_users": 30
+      }
+    },
+    "nmi": {
+      "louvain-label_propagation": 0.6596,
+      "louvain-greedy_modularity": 0.5256,
+      "label_propagation-greedy_modularity": 0.6214
+    }
+  },
+  "girvan_newman_core": {
+    "core_nodes": 148,
+    "core_edges": 513,
+    "girvan_newman": {
+      "best_level": 54,
+      "communities": 55,
+      "modularity": 0.2327
+    },
+    "louvain_unweighted": {
+      "communities": 12,
+      "modularity": 0.4383
+    },
+    "nmi": 0.5363
+  },
+  "seed": 42,
+  "damping": 0.85
+}

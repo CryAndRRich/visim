@@ -1,0 +1,36 @@
+{
+  "threads": 1244,
+  "reconstruction": {
+    "mention_replies": 2344,
+    "reattached": 2344,
+    "to_top_author": 0,
+    "unresolved": 0,
+    "self_mentions": 8,
+    "orphans": 0
+  },
+  "median": {
+    "size": 6.0,
+    "reply_ratio": 0.2,
+    "max_depth_2l": 2.0,
+    "max_depth_rec": 2.0,
+    "structural_virality_2l": 1.966,
+    "structural_virality_rec": 1.981
+  },
+  "max_depth_rec_distribution": {
+    "0": 174,
+    "1": 394,
+    "2": 306,
+    "3": 193,
+    "4": 90,
+    "5": 42,
+    "6": 22,
+    "7": 8,
+    "8": 5,
+    "9": 5,
+    "10": 1,
+    "11": 1,
+    "12": 1,
+    "19": 1,
+    "22": 1
+  }
+}

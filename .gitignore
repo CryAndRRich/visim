@@ -1,0 +1,17 @@
+# Secret key for hashing user ids: never commit, never delete
+secrets/
+logs/
+# Not shared: tests and experiment outputs
+tests/
+results/
+# Derived files
+data/kaggle/
+
+# Python
+__pycache__/
+*.pyc
+.pytest_cache/
+.venv/
+
+# macOS
+.DS_Store

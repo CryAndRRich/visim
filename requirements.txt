@@ -1,0 +1,12 @@
+# Python 3.9; versions verified on the project machine (2026-11-17)
+requests==2.32.5
+beautifulsoup4==4.15.0
+lxml==6.1.1
+pandas==2.3.3
+numpy==1.26.4
+pyarrow==21.0.0
+scipy==1.13.1
+scikit-learn==1.6.1
+networkx==3.2.1
+pytest==8.4.2
+# PhoBERT, ViSoBERT and Qwen run on Kaggle GPU (notebooks/); the notebooks install what they need.

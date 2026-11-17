@@ -1,0 +1,81 @@
+{
+  "articles": 1244,
+  "articles_with_comments_fetched": 1206,
+  "articles_without_comment_box": 38,
+  "comments": 20468,
+  "replies": 7491,
+  "replies_with_mention": 2352,
+  "users": 7952,
+  "users_in_at_least_2_articles": 2778,
+  "users_in_at_least_5_articles": 696,
+  "comment_share_of_top_1pct_users": 0.1763,
+  "published_from": "2026-09-23T17:00:00+00:00",
+  "published_to": "2026-10-12T09:00:00+00:00",
+  "comments_per_article": {
+    "median": 6.0,
+    "mean": 16.97,
+    "max": 379,
+    "zero": 136,
+    "at_least_10": 477,
+    "at_least_15": 365
+  },
+  "comments_within_48h_share": 0.9644,
+  "comment_count_vs_api_totalitem": [
+    20468,
+    20465
+  ],
+  "by_category": {
+    "giai-tri": {
+      "articles": 252,
+      "comments": 2871,
+      "median": 5.0,
+      "at_least_15": 53
+    },
+    "kinh-doanh": {
+      "articles": 224,
+      "comments": 4140,
+      "median": 7.0,
+      "at_least_15": 66
+    },
+    "phap-luat": {
+      "articles": 253,
+      "comments": 4834,
+      "median": 9.0,
+      "at_least_15": 84
+    },
+    "the-gioi": {
+      "articles": 219,
+      "comments": 2259,
+      "median": 3.0,
+      "at_least_15": 57
+    },
+    "thoi-su": {
+      "articles": 258,
+      "comments": 6364,
+      "median": 9.0,
+      "at_least_15": 105
+    }
+  },
+  "articles_by_publish_date": {
+    "2026-09-23": 4,
+    "2026-09-24": 36,
+    "2026-09-25": 37,
+    "2026-09-26": 39,
+    "2026-09-27": 35,
+    "2026-09-28": 56,
+    "2026-09-29": 70,
+    "2026-09-30": 72,
+    "2026-10-01": 78,
+    "2026-10-02": 75,
+    "2026-10-03": 75,
+    "2026-10-04": 58,
+    "2026-10-05": 90,
+    "2026-10-06": 94,
+    "2026-10-07": 100,
+    "2026-10-08": 103,
+    "2026-10-09": 102,
+    "2026-10-10": 73,
+    "2026-10-11": 45,
+    "2026-10-12": 2
+  }
+}
