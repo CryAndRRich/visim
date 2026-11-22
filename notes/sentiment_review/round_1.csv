@@ -5,7 +5,7 @@ E288,Hy vọng như vậy,Mong cuộc sống học tập sớm trở lại bình
 050,Thật đáng ngưỡng mộ!,,pos,claude-opus-5-5,khen: đáng ngưỡng mộ
 E226,"@USER_dda08b37a235 : Bạn thật chẳng biết gì cả, phí sàn tăng đồng nghĩa chi phí cuối cùng do người mua gánh. Shop than cũng là 1 cách để kéo giá sản phẩm xuống. Phí sàn 40% là quá kinh khủng, chưa kể còn rủi ro khác như hư hỏng hay tráo hàng, tất cả đều được tính vào giá sản phẩm.","@USER_e73006180564 : Bản chất kinh doanh là muốn thu lợi liên tục mà. Các sàn cũng biết khách hàng có sự phụ thuộc nhất định, nên tội gì mà phải giảm chi phí sàn.",neg,claude-opus-5-5,"chê người kia 'chẳng biết gì', bức xúc phí sàn 'quá kinh khủng'"
 R071,Ai mà không già đi bạn,"Khác xa ngày xưa, thời gian quá tàn nhẫn",neu,claude-opus-5-5,"nhận xét chung 'ai mà không già', không rõ khen chê"
-202,Cũng không ngoại lệ lắm nhỉ?,,neu,claude-opus-5-5,"câu hỏi ngắn không có ngữ cảnh, không rõ thái độ"
+202,Cũng không ngoại lệ lắm nhỉ?,,neg,claude-opus-5-5,câu hỏi ngắn không có ngữ cảnh; mơ hồ nên giữ nhãn cũ (rà lại ở lượt 3)
 R155,Có đài nước cho cả khu bạn ạ!,"ở đây họ ko làm bể trên mái nhỉ, nhìn thoáng quá.",neu,claude-opus-5-5,cung cấp thông tin (đài nước cho cả khu)
 246,bài viết hay,,pos,claude-opus-5-5,khen bài viết
 085,"Mấy cái giải cấp Phường như thế này thì tính chuyên nghiệp rõ ràng là không cao rồi, quá thiếu an toàn gây nguy hiểm",,neg,claude-opus-5-5,"chê thiếu chuyên nghiệp, thiếu an toàn"

@@ -1,0 +1,23 @@
+{
+  "round": 3,
+  "checked": 40,
+  "changed": 2,
+  "checked_by_group": {
+    "sure_pos": 10,
+    "sure_neg": 10,
+    "sure_neu": 10,
+    "uncertain": 10
+  },
+  "changed_by_group": {
+    "uncertain": 1,
+    "sure_pos": 1
+  },
+  "direction": {
+    "neu->neg": 2
+  },
+  "model_agrees_with_reviewer": 24,
+  "labeled_by": {
+    "claude-opus-5-5": 40
+  },
+  "written": true
+}

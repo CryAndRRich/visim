@@ -1,5 +1,5 @@
 ﻿id,text,parent_text,label
-001,"Mới vài năm phát triển mà đã thế này, thì chục năm nữa diễn viên AI có cảm xúc luôn rồi. Mong là sẽ không thay đổi quá nhanh, theo ko kịp",,neu
+001,"Mới vài năm phát triển mà đã thế này, thì chục năm nữa diễn viên AI có cảm xúc luôn rồi. Mong là sẽ không thay đổi quá nhanh, theo ko kịp",,neg
 002,"Có thua kém xa với những sản phẩm từ thiên nhiên hay không chẳng quan trọng, vấn đề là thị trường quyết định. Vì thị trường không nhất thiết chọn sản phẩm tốt nhất về một tiêu chí, mà chọn sản phẩm đáp ứng tốt nhất tổng hợp các nhu cầu mà người mua sẵn sàng trả tiền.",Dù sao thì vẫn thua kém xa với những sản phẩm từ thiên nhiên. Như do nhu cầu quá lớn nên sản phẩm qua xử lý công nghệ chỉ là nhanh và phù hợp với người mua.,neu
 003,"những con B hay A quả là phi thường , từ cú cắm đầu vượt âm , ngoài tính toán thiết kế mà nó vẫn an toàn chứng tỏ đi máy bay vẫn yên tâm",,pos
 004,"Vụ này là vi phạm bản quyền, vi phạm quyền sở hữu trí tuệ. Sao không xử lí ngay nhỉ?",,neg
@@ -145,7 +145,7 @@
 144,Đúng là diễn biến chỉ trong vài giây nhưng mỗi quyết định đều có thể ảnh hưởng đến tính mạng của hàng trăm người.,Tôi đọc mà xúc động vô cùng. Như phim hành động. Sự việc chỉ tính bằng giây nhưng họ đã chiến thắng.,pos
 145,"Ko có đâu bạn. Lưu thông nhanh hơn thì lại thêm xe lên cao tốc (trước họ chạy ở dưới, hoặc ngán tác quá, khỏi chạy)",Lượng xe lưu thông trên vành đai 3 hiện nay cũng vượt quá 8 đến 10 lần lưu lượng thiết kế. Cũng lượng xe như vậy được phân bố đều hơn trên mặt cầu và lưu thông nhanh hơn. Vậy giải pháp nào sẽ khả thi hơn?,neg
 146,Đồng tình với VKS! Mọi người tôn trọng trước pháp luật.,,pos
-147,"Cà phê Việt Nam ngày càng ngon, ngày càng chất lượng với đa dạng các món. Thế nhưng, nếu lại trồng ồ ạt thì giá lại rớt tanh bành.",,neu
+147,"Cà phê Việt Nam ngày càng ngon, ngày càng chất lượng với đa dạng các món. Thế nhưng, nếu lại trồng ồ ạt thì giá lại rớt tanh bành.",,neg
 148,Rất sang trọng và đẹp,,pos
 149,"Quá đã, giờ đi từ Long An qua Đồng Nai xuống Vũng Tàu tiện hẳn luôn",,pos
 150,"Giờ đi xe đạp nguy hiểm hơn đi xe máy. Nhất là khi băng qua đường, tôi luôn có cảm giác ko an toàn, ko chạy kịp, ko né được. Còn đi xe máy thì cảm thấy thoải mái hơn.",,neg
@@ -200,7 +200,7 @@
 199,"Lái xe lái máy công trường vất vả lắm, thu nhập và chế độ tốt như này mới xứng đáng với công sức ae bỏ ra",,pos
 200,Biết là nghề nào cũng có rủi ro nhưng đọc mà xót lòng quá :'( .,,neg
 201,"Này giống như ""đãi cát tìm vàng"" mà không thấy đâu vì có quá nhiều cuộc thi, đã vậy thi rớt rồi còn thi tiếp, đậu thì thôi :')",,neg
-202,Cũng không ngoại lệ lắm nhỉ?,,neu
+202,Cũng không ngoại lệ lắm nhỉ?,,neg
 203,Hoá ra hổ thật chứ không phải hổ giấy!,,neg
 204,Xem thế bị ám ảnh mất,,neg
 205,"Chỉ cần bổ công sức và kinh phí ra làm thật chỉnh chu thì sản phẩm nào của AI cũng đều đáng được đón nhận, tránh bài trừ 1 cách cực đoạn, cứ thấy sản phẩm từ AI là gác mác slop, rác . Thân !",,pos
@@ -587,7 +587,7 @@ E085,Đấy là phim AI rẻ tiền thôi bác! Bác qua douyin xem mấy phim A
 E086,Tại vì họ thích. Quan trọng là cách vợ chồng anh chung sống chứ không phải cái bài hát.,"Tại sao đi đám cưới mà hát mấy bài ""Xót xa - Thành phố buồn",neu
 E087,@USER_ec74d284d6e0 : Nếu là film để cảnh giác thì đề nghị nên chiếu lên TV cho mọi người đều coi được,@USER_b3c6a4c84335 : Xem để cảnh giác đó bạn. Bạn đừng cố gắng chê phim để thể hiện thái độ là bạn có kiến thức về phim ảnh,neu
 E088,"Bạn thông cảm,nhà sản xuất,đạo diễn nên tự mình kiêm luôn nam chính cho đủ bộ chứ,không quan tâm bản thân có khả năng diễn xuất hoặc hợp vai hay không...",Nhìn nam chính ko có 1 khí chất nào gọi là anh hùng cả.,neg
-E089,@USER_99d6ee760925 : Chính xác,Camera khắp nơi. Chỉ có xuống đất mới thoát.,neu
+E089,@USER_99d6ee760925 : Chính xác,Camera khắp nơi. Chỉ có xuống đất mới thoát.,pos
 E090,"khỏi lo bạn ơi, sinh viên mới ra trường nghệ thuật còn mong được đi theo học việc (không lương) tại các ekip chuyên nghiệp đấy",A k còn tuyển trợ lý k lương với phúc lợi là đc học hỏi kinh nghiệm làm việc nữa à?,neu
 E091,"Tôi nghĩ là 5 triệu đã phải làm 1 bộ hồ sơ + bắt buộc chuyển khoản khiến mọi thủ tục phúc tạp và khó khăn hơn trong mua bán , nếu mở rộng lên mức 10 triệu mới bắt buộc Ck + Hợp đồng , thì mọi thứ thông thoáng và phù hợp hơn. Hai nữa những người vi phạm về thuế Có thể khắc phục bằng tiền thì mọi người yên tâm làm việc. chính sách phải ổn định : người dân mới yên tâm làm ăn lâu dài,",Thống kê cần tìm hiểu lý do giải thể để điều chỉnh chính sách tốt hơn cho người dân. Tôi là 1 trong số đã giải thể doanh nghiệp trong đó lý do chính là thuế.,neg
 E092,@USER_297d0a420f25 : Ví dụ mục tiêu là nhà máy lọc dầu đi thì có ai đặt những sợi dây sát nhà máy không. Ít nhất những sợi dây này cách nhà máy 1 vài km thì súng phòng không mới phát huy tác dụng chứ.,@USER_87a9ae387b22 : Tới gần mục tiêu nó mới vòng lên rồi đâm xuống chứ Bro!,neu
@@ -1052,7 +1052,7 @@ R250,Nói ra bạn có hiểu không mà hỏi,"Cổng chào là kết cấu kh�
 R251,"@USER_f2dda73c6e68 : Tôi chẳng lầm gì cả, bạn mới lầm, vì bạn tưởng tôi ""dị ứng với phim AI"". Xin xem kỹ lại tôi đã viết gì. Còn mới lạ, thì cái gì mới mẻ lạ lẫm người ta chẳng thích. Còn nhớ hồi TV mới xuất hiện ở VN, người ta ""nghiện"" nó còn hơn nghiện phim AI bây giờ. Có những đứa trẻ vẫn chăm chăm nhìn vào màn hình trắng xóa của TV rất lâu, dù lúc đó nhà đài đã ngưng phát sóng!","@USER_0130843ff15c : Bạn nhầm rồi chính cái cảm giác mới lạ đó mới khiến người ta nghiện, mà AI lại đang làm quá tốt",neg
 R252,Đang vừa kẹt vừa đọc báo vừa tìm coi có xem mình trên báo ko kaka,,neu
 R253,"Đọc không kĩ rồi . Người ta nói vùng đó bị 5 quả, 1 quả trúng chung cư rõ ràng",Nếu toà chung cư bị 5 tên lửa hành trình đánh trúng thì sẽ không còn gì và con số người thiệt mạng sẽ không dừng lại ở con số 22.,neg
-R254,có chứ bạn bạn chưa hiểu hết bài báo rồi,"Không hào hứng chút nào, phải quy định giá trần. Cây xăng nào bán thấp hơn thì tùy.",neu
+R254,có chứ bạn bạn chưa hiểu hết bài báo rồi,"Không hào hứng chút nào, phải quy định giá trần. Cây xăng nào bán thấp hơn thì tùy.",neg
 R255,"@USER_ec8dec983e4c : Mình nói chung chung nha bạn về những kiểu người thấy bạn mình mặc xấu mà cũng cứ khen đẹp đó nhé, còn về Lisa cổ là người của công chúng nên công chúng vẫn lên tiếng khen hay chê bằng hình thức comment trên các nền tảng mạng xã hội, quan tâm hay không là quyền của cô ấy cũng không đến lượt bạn ý kiến luôn á. Còn mấy đối tượng như tạp chí này nọ họ tồn tại được cũng nhờ độc giả, người hâm mộ nên thái độ mà coi thường cộng đồng mạng, người hâm mộ hay người đọc báo thì họ cũng không dám có thái độ đó đâu nhé. Họ mà có suy nghĩ như bạn thì họ không tồn tại được đâu. Còn bạn là độc giả hay làm trong lĩnh vực đó mà bạn phát ngôn ngược vậy?","@USER_de40cfd7843c : Từ bao h ngta quan tâm đến ý kiến b vậy . Bạn chê xấu thì ngta phải sửa cho đẹp à . Hàng loạt tạp chí danh tiếng như Vogue , Elle , Cosmo cho đến fan, người qua đường khen đẹp , xong b chê xấu thì ngta phải thay đổi à .",neg
 R256,Để dành tiền đi bạn . Mà đọc sách thì chẳng bao giờ đắt cả .,Thật tuyệt! Không biết giá như thế nào và có bản điện tử không?,neu
 R257,@USER_855bad8dba86 : Vậy bạn muốn chịu lỗ thì bạn ra kinh doanh đi nào. Không ai cấm bạn cả :'),@USER_f9255f5119cf : Buôn bán lỗ k chịu thì ai chịu hả b?,neg
