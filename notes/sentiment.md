@@ -1,5 +1,7 @@
 # Cảm xúc (sentiment): ghi chép
 
+> **Nhãn `dev` của bài này là nhãn LLM, đã được LLM rà lại, không phải nhãn người kiểm tra.** Nhãn ban đầu do Claude gán. Ba lượt rà soát (120 mẫu) cũng do Claude (`claude-opus-5-5`) quyết, theo ngoại lệ ghi ở `TASK.md` mục 4, do Dũng quyết định ngày 22/11/2026. Vì vậy mọi điểm số dưới đây đo mức khớp với nhãn LLM, không phải với người đọc thật. Muốn ước lượng chất lượng nhãn, cần một người gán độc lập một mẫu ngẫu nhiên rồi tính độ đồng thuận.
+
 Người phụ trách: Dũng. Branch: `sentiment-dung`. Code: `src/classifiers/sentiment.py`, `notebooks/sentiment_visobert.ipynb`, `notebooks/sentiment_qwen.ipynb`.
 
 > Mỗi bảng điểm ghi kèm `dev_labels_sha` (12 ký tự đầu của SHA-256 trên cặp `id,label` của `dev.csv`, do `ladder` và `collect` in ra), để biết điểm tính trên nhãn của lượt nào.
@@ -11,7 +13,7 @@ Người phụ trách: Dũng. Branch: `sentiment-dung`. Code: `src/classifiers/s
   - `id` của `dev` là mã riêng (`001`, `E288`, ...), không phải `comment_id`. Để nối với `corpus.csv`, ghép theo (`text`, `parent_text`): cả 1.100 mẫu đều khớp, 2 mẫu khớp với hơn một bình luận giống hệt nhau (tổng 1.103 dòng corpus).
 - `corpus.csv`: 20.468 bình luận.
 - Không có `train.csv`: model học từ `dev` được chấm ngoài fold (5 fold, `StratifiedKFold(shuffle=True, random_state=42)`, siêu tham số chọn bằng kiểm định chéo lồng trong phần huấn luyện).
-- Phân bố nhãn sau khi sửa: _(điền khi xong)_
+- Phân bố nhãn sau 3 lượt rà soát (`dev_labels_sha = 7c078c6bb311`): 524 `neg`, 427 `neu`, 149 `pos`. Tổng cộng 7/1.100 nhãn đổi so với ban đầu (`git diff cefae3a -- data/tasks/sentiment/dev.csv`).
 
 ## 2. Các lượt sửa nhãn
 
@@ -30,13 +32,30 @@ python -m src.classifiers.sentiment ladder && python -m src.classifiers.sentimen
 
 `round_N_key.csv` ghi nhóm của từng mẫu (tin chắc `neg`/`neu`/`pos`, phân vân), dự đoán của model và nhãn trước khi sửa. `round_N_summary.json` ghi số mẫu đã kiểm tra, số nhãn sửa theo nhóm và theo chiều.
 
-| Lượt | Model chọn mẫu | Kiểm tra (chắc neg / neu / pos / phân vân) | Sửa | Chiều sửa | Commit |
-|---|---|---|---|---|---|
-| 1 | `visobert_pre_text` (không học từ `dev`) | 10 / 10 / 10 / 10 | | | |
+Người gán ở cả ba lượt: Claude (`labeled_by = claude-opus-5-5`). Lý do của từng mẫu nằm ở cột `reason` của `round_N.csv`.
 
-Ví dụ và kiểu lỗi hay gặp: _(điền theo từng lượt, ghi `id`)_
+| Lượt | Model chọn mẫu | Kiểm tra (chắc neg / neu / pos / phân vân) | Sửa (giữ lại sau lượt 3) | Chiều sửa (giữ lại) | Model khớp người gán | Commit |
+|---|---|---|---|---|---|---|
+| 1 | `visobert_pre_text` (không học từ `dev`) | 10 / 10 / 10 / 10 | 3 (2) | neu→neg (R123), pos→neu (211) | 28/40 | `ec7c0dd` |
+| 2 | `tfidf_lr_ctx_oof` (tốt nhất sau lượt 1) | 10 / 10 / 10 / 10 | 5 (3) | neu→neg (R212, 267, 180) | 25/40 | `eb21099` |
+| 3 | `tfidf_lr_ctx_oof` (tốt nhất sau lượt 2) | 10 / 10 / 10 / 10 | 2 (2) | neu→neg (001, 147) | 24/40 | `fbdbece` |
 
-Trường hợp định nghĩa còn mơ hồ: _(ghi `id` và cách đã quyết)_
+Ở lượt 3 có thêm quy ước "mẫu còn mơ hồ thì giữ nhãn hiện tại", nên 3 thay đổi của lượt 1-2 được trả về nhãn cũ: 202 (neg), E089 (pos), R254 (neg). `round_1_summary.json` và `round_2_summary.json` ghi số liệu lúc chạy lượt đó, trước khi trả về. Cột "giữ lại" là số cuối cùng.
+
+**Dừng sau lượt 3:** lượt này chỉ sửa 2/40 mẫu, đúng điều kiện dừng ở `TASK.md` (khoảng 1-2 trên 30-40). Điểm của model tốt nhất cũng không đổi đáng kể qua các lượt (0,564 → 0,568 → 0,570 → 0,568), đều nằm trong khoảng tin cậy.
+
+**Kiểu lỗi hay gặp của nhãn ban đầu:** gần như mọi chỗ sửa đều theo chiều `neu → neg`.
+- Câu hỏi vặn hoặc mỉa mai, bề ngoài là câu hỏi hay câu ngắn nên bị gán `neu`: R123 "Bạn có bán hàng trên sàn chưa ?", 180 "Vậy theo bạn giờ đổ cho ai?", 267 "Giờ chả 10 làn".
+- Lời lo ngại nói nhẹ: 001 "Mong là sẽ không thay đổi quá nhanh, theo ko kịp", 147 (khen cà phê rồi lo giá rớt).
+- Lập luận rằng một việc là bất công: R212.
+
+**Quy ước thêm khi định nghĩa ở mục 6 chưa rõ** (áp dụng cho các lượt sau và khi rà lại):
+1. Câu hỏi vặn, lời coi thường ("có đọc bài không", "bạn hiểu chưa", "bạn làm đạo diễn đi"): `neg`. Phản biện có lý lẽ, đính chính số liệu mà không hạ thấp người kia: `neu` (ví dụ 307, E299, 132).
+2. Lời mong, chúc điều tốt không kèm than phiền: `pos` (E288, 044, 154). Lời mong kèm buồn, cảm thông hay lo lắng: `neg` (008, 093, 102). Lời mong mang tính yêu cầu: `neu` (436).
+3. Có ý khen trước rồi ý chính sau "thế nhưng" là lo, chê: `neg` (147, 275).
+4. Mẫu còn mơ hồ sau khi đọc kỹ thì giữ nhãn hiện tại. Ví dụ E240 "Là an toàn tuyệt đối nha bạn" (trấn an hay mỉa mai?), 202, E089.
+
+**Rà lại cùng kiểu (sau lượt 3):** tìm trong các mẫu `dev` chưa kiểm tra. 9 mẫu coi thường kiểu "đọc bài đi" đều đã là `neg`. 8 mẫu mở đầu bằng "mong / hy vọng / chúc" đã khớp quy ước 2. Không cần sửa thêm.
 
 ## 3. Các model
 
@@ -76,9 +95,24 @@ Ma trận nhầm lẫn (hàng: nhãn thật neg / neu / pos; cột: dự đoán)
 
 Nhận xét ban đầu: ViSoBERT dùng sẵn tốt hơn hẳn với bình luận gốc (0,649 so với 0,527 của TF-IDF), nhưng kém với bình luận trả lời (0,44). Có thể vì các bình luận trả lời thường là tranh luận, không có từ cảm xúc rõ.
 
-### Sau khi nhãn ổn định
+### Sau 3 lượt rà soát (`dev_labels_sha = 7c078c6bb311`), các model chạy trên máy
 
-_(bảng của `collect`, ghi `dev_labels_sha`)_
+| Mức | Cấu hình | Macro-F1 [KTC 95%] | F1 neg | F1 neu | F1 pos | Macro-F1 bình luận gốc | Macro-F1 trả lời |
+|---|---|---|---|---|---|---|---|
+| Mốc | `majority` | 0,215 [0,206; 0,224] | 0,645 | 0,000 | 0,000 | 0,214 | 0,216 |
+| Mốc | `sopmi_oof` | 0,378 [0,349; 0,406] | 0,458 | 0,427 | 0,249 | 0,400 | 0,355 |
+| Cổ điển | `tfidf_lr_text_oof` | 0,568 [0,534; 0,599] | 0,630 | 0,583 | 0,492 | 0,556 | 0,546 |
+| Cổ điển | `tfidf_lr_ctx_oof` | 0,553 [0,519; 0,585] | 0,626 | 0,571 | 0,461 | 0,524 | 0,502 |
+| Học sâu | `visobert_pre_text` | 0,530 [0,499; 0,562] | 0,679 | 0,399 | 0,514 | 0,647 | 0,443 |
+| Học sâu | `visobert_pre_ctx` | 0,535 [0,505; 0,564] | 0,703 | 0,339 | 0,563 | 0,647 | 0,443 |
+
+Ma trận nhầm lẫn (hàng: nhãn thật neg / neu / pos):
+- `tfidf_lr_text_oof`: [[323, 147, 54], [141, 250, 36], [37, 34, 78]]
+- `visobert_pre_text`: [[375, 43, 106], [193, 119, 115], [13, 8, 128]]
+
+Ablation `parent_text`: với TF-IDF, thêm ngữ cảnh lúc hơn một chút ở các lượt trước (0,564 so với 0,556), lúc kém ở nhãn cuối (0,553 so với 0,568). Mọi chênh lệch đều nằm trong khoảng tin cậy, nên chưa thấy ngữ cảnh giúp ích. Với ViSoBERT dùng sẵn, ngữ cảnh làm model đoán `neg` nhiều hơn (F1 `neg` tăng, F1 `neu` giảm), macro-F1 gần như không đổi.
+
+**Chưa chạy:** ViSoBERT fine-tune và Qwen2.5 (`notebooks/sentiment_*.ipynb`, cần Kaggle GPU). Hai notebook đã chạy thử được trên máy ở quy mô nhỏ (100 mẫu, 1 epoch; Qwen 0.5B không lượng tử hóa). Chạy xong thì tải kết quả về `results/sentiment/kaggle/` và chạy `collect`.
 
 ## 5. Model cuối
 
