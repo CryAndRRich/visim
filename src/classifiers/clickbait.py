@@ -17,6 +17,8 @@ Usage (from the project root):
     python -m src.classifiers.clickbait ladder         # local levels (about 10 minutes on CPU)
     python -m src.classifiers.clickbait kaggle-bundle  # input files for the Kaggle notebooks
     python -m src.classifiers.clickbait collect        # merge Kaggle outputs into one table
+    python -m src.classifiers.clickbait review --round N --config dev_scores_<config>.csv  # items to check
+    python -m src.classifiers.clickbait apply-labels --round N  # write notes/clickbait_review/round_N.csv into dev
 Output: results/clickbait/ (metrics.json, ladder.csv, ablation.csv, ladder_full.csv, and one
 dev_scores_<config>.csv per configuration with columns id, pred, score). Kaggle outputs use the same
 format and go to results/clickbait/kaggle/.
@@ -37,7 +39,7 @@ from sklearn.naive_bayes import ComplementNB
 from sklearn.pipeline import FeatureUnion, Pipeline
 from sklearn.svm import LinearSVC
 
-from .common import RESULTS_DIR, ROOT, SEED, binary_metrics, bootstrap_ci, load_corpus, load_dev, load_train, run_info, write_results
+from .common import CSV_ENCODING, RESULTS_DIR, ROOT, SEED, binary_metrics, bootstrap_ci, load_corpus, load_dev, load_train, run_info, write_results
 
 
 # Hand-written keyword rules for curiosity gaps and sensational wording, not tuned on dev.
@@ -220,10 +222,84 @@ def collect() -> pd.DataFrame:
     return full
 
 
+REVIEW_DIR = ROOT / "notes" / "clickbait_review"
+DEV_PATH = ROOT / "data" / "tasks" / "clickbait" / "dev.csv"
+
+
+def checked_ids() -> set:
+    """Ids already reviewed in earlier rounds (notes/clickbait_review/round_<n>.csv)."""
+    ids = set()
+    for f in REVIEW_DIR.glob("round_*.csv"):
+        if re.fullmatch(r"round_\d+", f.stem):
+            ids |= set(pd.read_csv(f, dtype=str, encoding=CSV_ENCODING, keep_default_na=False)["id"])
+    return ids
+
+
+def review(round_no: int, config: str, n: int = 10) -> pd.DataFrame:
+    """Pick items to check by hand (TASK.md section 4): the n items the model is most sure are clickbait,
+    the n it is most sure are not, and the n closest to the threshold that gives a predicted positive share
+    equal to the label share. Items checked in earlier rounds are skipped; the three groups are disjoint.
+    Writes round_<n>_pick.csv (id, group, score) and round_<n>_blind.csv (id, title, sapo; no label, no
+    group, shuffled) for labelling without seeing the old label or the model's opinion."""
+    dev = load_dev("clickbait")
+    sc = pd.read_csv(RESULT_DIR / config, dtype={"id": str})
+    score = pd.Series(sc["score"].to_numpy(float), index=sc["id"])
+    s = score.drop(list(checked_ids() & set(score.index)))
+    t = s.quantile(1 - (dev["label"] == "1").mean())
+    top = s.nlargest(n).index
+    bottom = s.drop(top).nsmallest(n).index
+    rest = s.drop(top.union(bottom))
+    near = (rest - t).abs().nsmallest(n).index
+    pick = pd.concat([pd.DataFrame({"id": top, "group": "sure_1"}), pd.DataFrame({"id": bottom, "group": "sure_0"}),
+                      pd.DataFrame({"id": near, "group": "uncertain"})], ignore_index=True)
+    pick["score"] = pick["id"].map(score).round(4)
+    pick["threshold"] = round(float(t), 4)
+    pick["config"] = config
+    REVIEW_DIR.mkdir(parents=True, exist_ok=True)
+    pick.to_csv(REVIEW_DIR / f"round_{round_no}_pick.csv", index=False, encoding=CSV_ENCODING)
+    blind = dev.set_index("id").loc[pick["id"], ["title", "sapo"]].reset_index()
+    blind = blind.sample(frac=1, random_state=SEED + round_no)
+    blind.to_csv(REVIEW_DIR / f"round_{round_no}_blind.csv", index=False, encoding=CSV_ENCODING)
+    return pick
+
+
+def apply_labels(round_no: int) -> dict:
+    """Write the decided labels of round_<n>.csv (id, group, old, new, reason) into dev.csv, changing only
+    the label column (pandas round-trips the file byte for byte)."""
+    rev = pd.read_csv(REVIEW_DIR / f"round_{round_no}.csv", dtype=str, encoding=CSV_ENCODING, keep_default_na=False)
+    dev = load_dev("clickbait")
+    before = dev.copy()
+    idx = dev.set_index("id").index
+    new = dict(zip(rev["id"], rev["new"]))
+    if not set(new) <= set(idx) or not set(new.values()) <= {"0", "1"}:
+        raise ValueError("unknown id or label in review file")
+    old_now = dict(zip(dev["id"], dev["label"]))
+    for i, o in zip(rev["id"], rev["old"]):
+        if old_now[i] != o:
+            raise ValueError(f"{i}: review says old label {o}, dev.csv has {old_now[i]}")
+    dev["label"] = [new.get(i, l) for i, l in zip(dev["id"], dev["label"])]
+    assert (dev.drop(columns="label") == before.drop(columns="label")).all().all()
+    dev.to_csv(DEV_PATH, index=False, encoding=CSV_ENCODING)
+    changed = rev[rev["old"] != rev["new"]]
+    return {"checked": len(rev), "changed": len(changed),
+            "0->1": int(((changed.old == "0") & (changed.new == "1")).sum()),
+            "1->0": int(((changed.old == "1") & (changed.new == "0")).sum()),
+            "dev_positive": int((dev["label"] == "1").sum())}
+
+
 def main(argv=None) -> int:
     parser = argparse.ArgumentParser(description="Clickbait model ladder on the dev set")
-    parser.add_argument("action", nargs="?", default="ladder", choices=["ladder", "kaggle-bundle", "collect"])
+    parser.add_argument("action", nargs="?", default="ladder",
+                        choices=["ladder", "kaggle-bundle", "collect", "review", "apply-labels"])
+    parser.add_argument("--round", type=int, help="review / apply-labels: round number")
+    parser.add_argument("--config", help="review: dev_scores_<config>.csv in results/clickbait/ used to pick items")
     args = parser.parse_args(argv)
+    if args.action == "review":
+        print(review(args.round, args.config).to_string(index=False))
+        return 0
+    if args.action == "apply-labels":
+        print(apply_labels(args.round))
+        return 0
     if args.action == "kaggle-bundle":
         kaggle_bundle()
         return 0
