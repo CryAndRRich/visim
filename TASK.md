@@ -108,6 +108,7 @@ Lặp các bước sau cho tới khi nhãn `dev` ổn định:
 3. **Kiểm tra bằng tay.**
    - Đọc nội dung trước, tự quyết nhãn theo định nghĩa ở mục 6, rồi mới so với cột `label`.
    - Không dùng ChatGPT, Claude hay công cụ AI nào để quyết nhãn.
+     - **Ngoại lệ, chỉ cho bài toán cảm xúc** (Dũng quyết định, 22/11/2026): các lượt kiểm tra do LLM (Claude) gán thay người, theo đúng định nghĩa ở mục 6. Mỗi quyết định ghi lại người gán và lý do ngắn trong `notes/sentiment_review/round_N.csv` (cột `labeled_by`, `reason`). `notes/sentiment.md` phải ghi rõ nhãn `dev` của bài này là nhãn LLM đã được LLM rà lại, **không phải nhãn người kiểm tra**. Vì vậy điểm báo cáo đo mức khớp với LLM, không phải với người. Hai bài toán còn lại vẫn theo quy tắc trên, trừ khi cả nhóm đồng ý đổi.
    - Sai thì sửa thẳng cột `label` trong `dev.csv`. Không sửa, xóa hay đổi thứ tự cột và dòng khác. Lưu lại dạng CSV UTF-8.
 4. **Commit mỗi lượt một lần,** ví dụ: `dev: luot 2, kiem tra 40 mau, sua 6 nhan`.
 5. **Chạy lại model trên nhãn mới** và quay về bước 2.
