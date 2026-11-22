@@ -21,6 +21,8 @@ Usage (from the project root):
     python -m src.classifiers.clickbait apply-labels --round N  # write notes/clickbait_review/round_N.csv into dev
     python -m src.classifiers.clickbait extras [--family tfidf_lr]  # extra baselines and ablations (a few minutes)
     python -m src.classifiers.clickbait final --config tfidf_lr [--segment] [--balanced] [--threshold 0.5|cv|prior]
+    python -m src.classifiers.clickbait in-domain      # dev-trained TF-IDF / handcrafted models, nested CV
+    python -m src.classifiers.clickbait final --config hand_tfidf_lr --in-domain dev
     python -m src.classifiers.clickbait final --from-file results/clickbait/kaggle/corpus_scores_<config>.csv
 Output: results/clickbait/ (metrics.json, ladder.csv, ablation.csv, ladder_full.csv, and one
 dev_scores_<config>.csv per configuration with columns id, pred, score). Kaggle outputs use the same
@@ -50,7 +52,7 @@ import pandas as pd
 from sklearn.base import clone
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import LogisticRegression
-from sklearn.metrics import precision_recall_curve
+from sklearn.metrics import average_precision_score, precision_recall_curve
 from sklearn.model_selection import GridSearchCV, StratifiedKFold, cross_val_predict, train_test_split
 from sklearn.naive_bayes import ComplementNB
 from sklearn.pipeline import FeatureUnion, Pipeline
@@ -553,6 +555,80 @@ def extras(family: str = "tfidf_lr") -> dict:
 
 
 # ---------------------------------------------------------------------------------------------------------
+# In-domain models: trained on dev (optionally plus ViClickbait), TF-IDF and/or handcrafted features.
+# Scored out of fold; C and the decision threshold are chosen by an inner 5-fold CV over the dev part of
+# each training fold (never on the scored fold).
+
+KINDS = ("tfidf_lr", "hand_lr", "hand_tfidf_lr")
+C_GRID = [0.3, 1, 3, 10, 30]
+
+
+def kind_pipe(kind: str, C: float) -> Pipeline:
+    hand = Pipeline([("hand", FunctionTransformer(handcrafted)), ("scale", StandardScaler())])
+    feat = {"tfidf_lr": features(), "hand_lr": hand,
+            "hand_tfidf_lr": FeatureUnion([("tfidf", features()), ("hand", hand)])}[kind]
+    return Pipeline([("feat", feat), ("clf", LogisticRegression(C=C, max_iter=3000, random_state=SEED))])
+
+
+def tune_in_domain(kind: str, xd: pd.Series, yd: np.ndarray, xe: pd.Series | None, ye: np.ndarray | None):
+    """Pick C by inner 5-fold PR-AUC over the dev items given (extra ViClickbait data, if any, is always in
+    training), then the F1-optimal threshold on the inner out-of-fold scores of that C."""
+    splits = list(StratifiedKFold(5, shuffle=True, random_state=SEED).split(xd, yd))
+    best = None
+    for C in C_GRID:
+        s = np.zeros(len(yd))
+        for a, b in splits:
+            x = xd.iloc[a] if xe is None else pd.concat([xe, xd.iloc[a]])
+            y = yd[a] if ye is None else np.concatenate([ye, yd[a]])
+            s[b] = kind_pipe(kind, C).fit(x, y).predict_proba(xd.iloc[b])[:, 1]
+        ap = float(average_precision_score(yd, s))
+        if best is None or ap > best[0]:
+            best = (ap, C, s)
+    return {"C": best[1], "threshold": f1_threshold(yd, best[2]), "inner_pr_auc": round(best[0], 4)}
+
+
+def fit_in_domain(kind: str, xd, yd, xe, ye, C: float) -> Pipeline:
+    x = xd if xe is None else pd.concat([xe, xd])
+    y = yd if ye is None else np.concatenate([ye, yd])
+    return kind_pipe(kind, C).fit(x, y)
+
+
+def in_domain() -> dict:
+    """python -m src.classifiers.clickbait in-domain -> results/clickbait/in_domain/."""
+    vc = load_viclickbait()
+    dev = load_dev("clickbait")
+    y = dev["label"].astype(int).to_numpy()
+    xd, xv, yv = text_of(dev, False), text_of(vc, False), vc["y"].to_numpy()
+    folds = list(StratifiedKFold(5, shuffle=True, random_state=SEED).split(dev, y))
+    rows, per_config = [], {}
+    for kind in KINDS:
+        for train in ("dev", "viclickbait+dev"):
+            t0 = time.time()
+            xe, ye = (None, None) if train == "dev" else (xv, yv)
+            score, pred, chosen = np.zeros(len(y)), np.zeros(len(y), dtype=int), []
+            for tr, te in folds:
+                c = tune_in_domain(kind, xd.iloc[tr], y[tr], xe, ye)
+                m = fit_in_domain(kind, xd.iloc[tr], y[tr], xe, ye, c["C"])
+                score[te] = m.predict_proba(xd.iloc[te])[:, 1]
+                pred[te] = (score[te] >= c["threshold"]).astype(int)
+                chosen.append(c)
+            name = f"{kind}_{train.replace('viclickbait+', 'vc_plus_')}_oof"
+            r = {"level": "classical", "group": "in_domain", "model": name, "train": f"{train}(oof)", "input": "title",
+                 **evaluate(y, score, pred), "seconds": round(time.time() - t0, 1),
+                 "C_per_fold": [c["C"] for c in chosen], "threshold_per_fold": [round(c["threshold"], 3) for c in chosen]}
+            rows.append(r)
+            per_config[f"dev_scores_{name}.csv"] = pd.DataFrame({"id": dev["id"], "pred": pred, "score": np.round(score, 4)})
+            print(f"  {name:32s} f1={r['f1']:.3f} {r['f1_ci95']} pr_auc={r['pr_auc']:.3f} {r['pr_auc_ci95']} "
+                  f"share={r['predicted_positive_share']:.3f} ({r['seconds']}s)", flush=True)
+    table = pd.DataFrame(rows)
+    payload = {**run_info(), "task": "clickbait", "hardware": hardware(), "C_grid": C_GRID,
+               "protocol": "outer 5-fold over dev; inner 5-fold over the dev part of the training fold picks C "
+                           "(PR-AUC) and the F1-optimal threshold", "results": table.to_dict(orient="records")}
+    write_results("clickbait/in_domain", payload, {"in_domain.csv": table, **per_config})
+    return payload
+
+
+# ---------------------------------------------------------------------------------------------------------
 # Final labels for the whole corpus (TASK.md section 4, "Bước cuối")
 
 def _dev_rows_in_corpus(corpus: pd.DataFrame, dev: pd.DataFrame) -> pd.Series:
@@ -571,7 +647,7 @@ def _dev_rows_in_corpus(corpus: pd.DataFrame, dev: pd.DataFrame) -> pd.Series:
 
 
 def final(config: str | None = None, from_file: str | None = None, use_segment: bool = False,
-          balanced: bool = False, threshold: str = "0.5") -> dict:
+          balanced: bool = False, threshold: str = "0.5", in_domain_train: str | None = None) -> dict:
     t0 = time.time()
     corpus = load_corpus("clickbait")
     dev = load_dev("clickbait")
@@ -585,6 +661,22 @@ def final(config: str | None = None, from_file: str | None = None, use_segment: 
         k = k.set_index("id").loc[corpus["id"]]
         score, pred = k["score"].to_numpy(float), k["pred"].astype(int).to_numpy()
         info.update({"config": os.path.basename(from_file), "source_file": str(from_file), "threshold_rule": "from file"})
+    elif in_domain_train:
+        if config not in KINDS:
+            raise ValueError(f"--in-domain needs --config in {list(KINDS)}")
+        yd = dev["label"].astype(int).to_numpy()
+        xd = text_of(dev, False)
+        xe, ye = (None, None)
+        if in_domain_train == "viclickbait+dev":
+            vc = load_viclickbait()
+            xe, ye = text_of(vc, False), vc["y"].to_numpy()
+        c = tune_in_domain(config, xd, yd, xe, ye)
+        model = fit_in_domain(config, xd, yd, xe, ye, c["C"])
+        score = model.predict_proba(text_of(corpus, False))[:, 1]
+        pred = (score >= c["threshold"]).astype(int)
+        info.update({"config": config, "train": in_domain_train, "C": c["C"], "threshold": round(c["threshold"], 4),
+                     "threshold_rule": "F1-optimal on inner 5-fold out-of-fold dev scores", "inner_pr_auc": c["inner_pr_auc"],
+                     "train_n": int(len(yd) + (0 if ye is None else len(ye))), "score": "probability"})
     else:
         if config not in MODELS:
             raise ValueError(f"--config must be one of {list(MODELS)} (or use --from-file)")
@@ -700,7 +792,7 @@ def apply_labels(round_no: int) -> dict:
 def main(argv=None) -> int:
     parser = argparse.ArgumentParser(description="Clickbait model ladder on the dev set")
     parser.add_argument("action", nargs="?", default="ladder",
-                        choices=["ladder", "kaggle-bundle", "collect", "review", "apply-labels", "extras", "final"])
+                        choices=["ladder", "kaggle-bundle", "collect", "review", "apply-labels", "extras", "in-domain", "final"])
     parser.add_argument("--round", type=int, help="review / apply-labels: round number")
     parser.add_argument("--config", help="review: dev_scores_<config>.csv in results/clickbait/ used to pick items; "
                                          "final: model family (tfidf_lr, tfidf_svm, tfidf_nb)")
@@ -711,7 +803,15 @@ def main(argv=None) -> int:
     parser.add_argument("--threshold", default="0.5", choices=["0.5", "cv", "prior"],
                         help="final: 0.5 (0 for SVM), F1-optimal on out-of-fold training scores, or prior shift "
                              "to the VnExpress part of ViClickbait")
+    parser.add_argument("--in-domain", choices=["dev", "viclickbait+dev"],
+                        help="final: in-domain model (--config tfidf_lr|hand_lr|hand_tfidf_lr) trained on dev or "
+                             "ViClickbait + dev; C and threshold by 5-fold CV over dev")
     args = parser.parse_args(argv)
+    if args.action == "in-domain":
+        payload = in_domain()
+        print(pd.DataFrame(payload["results"])[["model", "f1", "f1_ci95", "precision", "recall", "pr_auc", "pr_auc_ci95",
+                                                "predicted_positive_share", "seconds"]].to_string(index=False))
+        return 0
     if args.action == "extras":
         t0 = time.time()
         payload = extras(args.family)
@@ -724,7 +824,7 @@ def main(argv=None) -> int:
     if args.action == "final":
         if not args.config and not args.from_file:
             parser.error("final needs --config or --from-file")
-        payload = final(args.config, args.from_file, args.segment, args.balanced, args.threshold)
+        payload = final(args.config, args.from_file, args.segment, args.balanced, args.threshold, args.in_domain)
         print(json.dumps({k: v for k, v in payload.items() if k != "hardware"}, indent=2, ensure_ascii=False))
         return 0
     if args.action == "review":
