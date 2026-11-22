@@ -248,14 +248,25 @@ def tfidf_oof(dev: pd.DataFrame, y: np.ndarray, use_parent: bool) -> tuple[np.nd
 
 # --------------------------------------------------------------------------- pretrained ViSoBERT
 
+def visobert_tokenizer():
+    """transformers 5 rebuilds XLMRobertaTokenizer as a Unigram model, but ViSoBERT's tokenizer.json is BPE
+    (TypeError: 'dict' object is not an instance of 'Sequence'). Loading tokenizer.json directly gives the
+    same token ids as transformers 4 (checked on every dev comment and comment pair)."""
+    from transformers import AutoTokenizer, PreTrainedTokenizerFast
+    try:
+        return AutoTokenizer.from_pretrained(VISOBERT)
+    except TypeError:
+        return PreTrainedTokenizerFast.from_pretrained(VISOBERT)
+
+
 def visobert_proba(texts, parents=None, batch_size: int = 32) -> np.ndarray:
     """Pretrained 5CD-AI ViSoBERT sentiment, no training. Its head is ordered NEG, POS, NEU (config.id2label);
     columns are returned in CLASSES order (neg, neu, pos). With `parents`, replies are encoded as the pair
     (comment, parent comment)."""
     import torch
-    from transformers import AutoModelForSequenceClassification, AutoTokenizer
+    from transformers import AutoModelForSequenceClassification
 
-    tok = AutoTokenizer.from_pretrained(VISOBERT)
+    tok = visobert_tokenizer()
     model = AutoModelForSequenceClassification.from_pretrained(VISOBERT).eval()
     order = [{v.lower(): k for k, v in model.config.id2label.items()}[c] for c in CLASSES]
     texts = [clean(t) for t in texts]
