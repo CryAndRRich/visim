@@ -1,0 +1,270 @@
+﻿id,group,score,old,new,rule,reason
+001,sweep_pos,,1,1,2-emotive,Ẩn dụ 'tiêm kích ma' thay tên MiG-23.
+006,sweep_pos,,1,1,1-vague,'Những lời đầu tiên' giấu nội dung chính để gây tò mò.
+016,sweep_pos,,1,1,2-emotive,'đánh tan hoang' là cách nói phóng đại.
+023,sweep_pos,,1,0,0-informative,"Nêu rõ sự việc (công an làm việc với người đăng tin sai về Novaland); 'câu view' là từ lóng trong ngoặc mô tả động cơ, không cường điệu."
+028,sweep_pos,,1,0,0-informative,"Sự việc nêu đủ (vợ giúp chồng đòi lại tiền, trang sức); 'tiểu tam' là từ thông dụng, người không nêu tên nhưng sự việc rõ (tiền lệ 227)."
+030,sweep_pos,,1,0,0-informative,"'Đứt gãy an ninh' và 'suýt gây thảm họa' mô tả đúng sự việc (lỗ hổng trao đổi thông tin), không giấu thông tin chính, không giật gân."
+041,sweep_pos,,1,1,0-informative,"Giữ 1: 'Tình cảnh trơ trọi' mơ hồ, giấu thông tin chính (không có nhà chứa máy bay kiên cố) để gợi tò mò; ẩn dụ do người viết chọn."
+073,sweep_pos,,1,1,2-emotive,"'Thầy phong thuỷ' không tên, ẩn dụ 'đạo diễn', 'dựa hơi'."
+075,sweep_pos,,1,1,2-emotive,"'Những phút sinh tử' kịch tính hóa, giấu diễn biến."
+085,sweep_pos,,1,1,2-emotive,Ẩn dụ 'dồn đến chân tường'.
+112,sweep_pos,,1,1,2-emotive,Ẩn dụ 'giặc lửa' do người viết chọn.
+118,sweep_pos,,1,1,2-emotive,Ẩn dụ 'yêu râu xanh' thay hung thủ không tên.
+120,sweep_pos,,1,0,0-informative,"'quả đào mọng' là tên một phong cách thời trang (giống tên gọi trong ngoặc), có tên thật Lưu Diệc Phi."
+128,sweep_pos,,1,1,1-nickname,'Bà trùm' thay tên Nguyễn Thị Mai Anh.
+131,sweep_pos,,1,0,0-informative,'nam thần' đi kèm tên thật Nadech Kugimiya (quy ước: biệt danh cạnh tên thật -> 0); tin tặng vé thông tin.
+140,sweep_pos,,1,1,1-nickname,'đệ nhất tham quan' thay tên Lý Kiến Bình.
+158,sweep_pos,,1,1,1-nickname,'Bà trùm' thay tên Nguyễn Thị Mai Anh.
+187,sweep_pos,,1,1,2-emotive,"'nổi loạn' trong ngoặc là ẩn dụ, mơ hồ."
+194,sweep_pos,,1,1,2-emotive,"'quân sư' ẩn dụ, không nêu tên kiểm sát viên."
+200,sweep_pos,,1,1,2-emotive,'sống mái' là từ kịch tính hóa.
+202,sweep_pos,,1,1,1-list,'Những chi tiết gây chú ý' không nói là gì.
+234,sweep_pos,,1,1,1-list,'Những xu hướng' không nói gồm gì.
+245,sweep_pos,,1,1,2-emotive,'chấn động' và danh sách không nêu.
+255,sweep_pos,,1,1,1-question,'Vì sao...?' không được trả lời.
+259,sweep_pos,,1,1,1-question,'thực tế đã chi bao nhiêu?' không được trả lời.
+266,sweep_pos,,1,1,1-vague,'Số phận' giấu kết cục của các tử tù.
+268,sweep_pos,,1,1,1-vague,"'Cuốn sách' không nêu tên, ẩn dụ 'bầu trời ước mơ'."
+293,sweep_pos,,1,1,1-vague,'loài cá mập bí ẩn' không nêu tên loài.
+307,sweep_pos,,1,1,1-nickname,"'trùm ma túy Hàn Quốc' không tên, ẩn dụ 'đế chế sau song sắt'."
+308,sweep_pos,,1,0,0-informative,"Nêu rõ phòng khám Thái Hà sửa kết quả xét nghiệm để dọa khách; 'moi' trong ngoặc mô tả hành vi, không cường điệu."
+327,sweep_pos,,1,1,1-nickname,'Sao đẹp nhất thế giới' thay cho tên Nana.
+338,sweep_pos,,1,1,2-emotive,"Ẩn dụ 'biệt thự ác mộng', 'gia đình siêu giàu' không tên."
+368,sweep_pos,,1,1,1-vague,'Lý do' không nêu lý do.
+378,sweep_pos,,1,1,1-nickname,'Hãng trang sức lớn nhất thế giới' thay tên Pandora.
+387,sweep_pos,,1,1,2-emotive,'khiến California dậy sóng' là ẩn dụ cảm xúc.
+412,sweep_pos,,1,1,2-emotive,'dát hàng hiệu' là cách nói phóng đại.
+452,sweep_pos,,1,1,2-emotive,Ẩn dụ 'mưa lời khen'.
+454,sweep_pos,,1,0,0-informative,Thông tin đủ: phim cắt cảnh để phát hành bản 13+; 'nóng' là uyển ngữ thông dụng cho cảnh bạo lực/nhạy cảm.
+476,sweep_pos,,1,0,0-informative,"'Mưa trắng trời, giao thông tê liệt' là cách mô tả thời tiết thông dụng, đúng sự việc."
+485,sweep_pos,,1,1,1-vague,'Nguyên nhân có thể' không nói nguyên nhân gì.
+H001,sweep_H,,0,0,0-event-word,"'Khởi tố', 'tử vong' mô tả sự kiện."
+H002,sweep_H,,0,0,0-named-quote,Trích dẫn của Lý Á Bằng.
+H003,sweep_H,,0,0,0-informative,"Nêu rõ trộm 2,4 tỷ của vợ cũ."
+H005,sweep_H,,0,0,0-informative,Nêu rõ đô vật bị truy tố.
+H006,sweep_H,,0,0,0-informative,Nêu rõ sự việc vợ bắn chồng và lý do.
+H007,sweep_H,,0,0,0-informative,"Có tên thật Đinh Viết Tường, mô tả khách quan."
+H008,sweep_H,,0,0,0-informative,Nêu rõ tiếp tục giảm thuế xăng dầu.
+H010,sweep_H,,0,0,0-informative,Nêu rõ sự việc người đàn ông bị sóng cuốn.
+H011,sweep_pos,,1,1,1-nickname,''ông lớn' ngành tàu biển' thay tên Hải An.
+H012,sweep_H,,0,0,0-informative,Nêu rõ đêm nhạc Michael Learns To Rock.
+H013,sweep_pos,,1,1,2-emotive,'gây mê mẩn' là từ cảm xúc phóng đại.
+H014,sweep_H,,0,0,0-informative,Nêu rõ hồ Trị An xả lũ.
+H015,sweep_H,,0,0,0-informative,"'gây chú ý' mức nhẹ, nêu rõ chiều cao."
+H016,sweep_H,,0,0,0-named-quote,"Quan điểm của Anne Carson, có tên."
+H017,sweep_H,,0,0,0-event-word,'tử vong' mô tả sự kiện.
+H018,sweep_H,,0,0,0-informative,Nêu rõ dàn diễn viên phụ của phim.
+H019,sweep_H,,0,0,0-informative,'tiến thoái lưỡng nan' mô tả tình thế.
+H020,sweep_H,,0,0,2-emotive,"Giữ 0: 'gồng mình làm người giàu' là cụm mô tả hiện tượng (áp lực tỏ ra giàu), tiêu đề nêu rõ chủ thể và vấn đề."
+H021,sweep_H,,0,0,0-informative,"Nêu rõ Musk, Bezos dự quốc yến."
+H022,sweep_H,,0,0,0-named-quote,Trích dẫn của mẹ Captain Boy.
+H023,sweep_pos,,1,1,2-emotive,"'Nghịch tử' là từ phán xét cảm xúc, thiếu ai/ở đâu."
+H024,sweep_H,,0,0,0-informative,Nêu rõ Dương Domic ứng viên quán quân.
+H025,sweep_H,,0,0,0-real-question,Câu hỏi thực tế 'cần làm gì để bảo vệ tác phẩm?'.
+H026,sweep_pos,,1,1,1-list,'Dàn mỹ nhân' không nêu tên.
+H027,sweep_H,,0,0,0-informative,Nêu rõ phòng gym nợ thuế.
+H028,sweep_H,,0,0,0-informative,"'gây chú ý' mức nhẹ, nêu rõ Mỹ Tâm."
+H029,sweep_H,,0,0,0-informative,Nêu rõ vợ Ronaldo đưa con đi concert.
+H030,sweep_H,,0,0,0-named-quote,Trích dẫn của ông Trump.
+H031,sweep_H,,0,0,0-informative,Nêu rõ rùa biển đẻ 82 trứng.
+H032,sweep_pos,,1,1,1-question,Câu hỏi 'Vì sao...?' không được trả lời trong tiêu đề.
+H033,sweep_pos,,1,0,0-informative,"'chú rể' là vai trong MV, đi kèm tên thật Bảo Định; sự việc nêu rõ."
+H034,sweep_H,,0,0,0-informative,Nêu rõ lập fanpage giả lừa tiền.
+H035,sweep_H,,0,1,1-nickname,"1-nickname: tên vai 'Tế Công' thay cho tên thật Du Bổn Xương, người đọc không biết ai qua đời."
+H036,sweep_pos,,1,1,1-list,"Danh sách '10 kiểu mốt' không nói gồm gì, 'lên ngôi'."
+H037,sweep_H,,0,1,1-list,1-list: 'Những tình tiết có thật' không nói là tình tiết gì.
+H038,sweep_H,,0,0,0-informative,Nêu rõ quy định KPI người đứng đầu.
+H039,sweep_H,,0,0,0-informative,Nêu rõ bát cũ giúp nhận diện liệt sĩ.
+H040,sweep_H,,0,0,0-informative,Nêu rõ PNJ rút thời gian trả tiền.
+H041,sweep_H,,0,0,0-informative,Nêu rõ rủi ro bảo mật Bitcoin.
+H042,sweep_H,,0,0,0-informative,Nêu rõ Hoài Lâm chụp ảnh cưới.
+H043,sweep_H,,0,0,0-informative,Nêu rõ ông Trump hạ chuẩn nhiên liệu.
+H044,sweep_H,,0,0,0-informative,Nêu rõ giá vàng tăng.
+H045,sweep_H,,0,0,0-named-quote,Phát biểu của Bill Gates.
+H046,sweep_H,,0,0,0-informative,"'rung chuyển' mô tả đúng trận động đất 7,7 độ."
+H047,sweep_pos,,1,1,1-nickname,"'minh tinh Bến Thượng Hải' thay tên Triệu Nhã Chi, kèm 'hack tuổi'."
+H049,sweep_pos,,1,1,1-vague,'Mối đe dọa' không nói là gì.
+H050,sweep_H,,0,0,0-informative,Nêu rõ Hề Mộng Dao đeo 22 vòng vàng.
+H051,sweep_H,,0,0,1-vague,"Giữ 0: bài tổng hợp về nhóm người nổi tiếng nói chung trong tù; 'sau song sắt' là thành ngữ thông dụng, không giấu một người cụ thể."
+H052,sweep_H,,0,0,0-informative,Nêu rõ hai váy cưới của vợ Akira Phan.
+H053,sweep_H,,0,0,0-informative,"Nêu rõ số người, số tiền đường dây đánh bạc."
+H055,sweep_H,,0,0,0-informative,Nêu rõ tranh chấp tài sản nghìn tỷ.
+H056,sweep_H,,0,0,0-informative,Nêu rõ công an làm việc với admin nhóm.
+H057,sweep_H,,0,0,0-informative,Nêu rõ khán giả phản ứng trailer AI.
+H058,sweep_H,,0,0,0-named-quote,Phát biểu của ông Trump.
+H059,sweep_H,,0,0,0-informative,Nêu rõ Mai Phương dự sự kiện.
+H060,sweep_H,,0,0,0-informative,Nêu rõ nghiên cứu giao dịch xuyên trưa.
+H061,sweep_H,,0,0,0-informative,Nêu rõ cátxê là ổ bánh mì.
+H062,sweep_H,,0,0,0-informative,Nêu rõ phong cách thời trang của Madonna.
+H063,sweep_pos,,1,1,1-question,'... bao nhiêu tiền?' không được trả lời.
+H064,sweep_H,,0,0,0-event-word,Nêu rõ sự việc khiến bé 'tử vong'.
+H065,sweep_pos,,1,1,1-vague,'Trở ngại' không nói là gì.
+H066,sweep_H,,0,0,0-real-question,Câu hỏi pháp lý 'đến mức nào có thể thành vụ án?'.
+H067,sweep_H,,0,0,0-informative,Nêu rõ quy định miễn trách nhiệm luật sư công.
+H068,sweep_H,,0,0,0-work-title,Tên ca khúc 'Em Tiên'.
+H069,sweep_H,,0,0,0-informative,Nêu rõ hành vi 'nâng khống giá thực phẩm'.
+H070,sweep_pos,,1,1,1-vague,'Lý do' không nêu lý do.
+H071,sweep_H,,0,0,0-work-title,Tên tác phẩm 'Bí mật trong gương'.
+H072,sweep_H,,0,0,0-informative,Nêu rõ cách trang điểm của vợ Hoài Lâm.
+H073,sweep_H,,0,0,0-named-quote,Trích dẫn của Akira Phan.
+H074,sweep_H,,0,0,0-real-question,Câu hỏi pháp lý của độc giả 'có phải đóng thuế?'.
+H075,sweep_H,,0,0,0-informative,Nêu rõ Bằng Việt đoạt giải.
+H076,sweep_H,,0,0,0-informative,Nêu rõ cơ phó bị Oman cấm bay.
+H077,sweep_H,,0,0,0-named-quote,Trích dẫn của nghệ sĩ Kim Xuân.
+H078,sweep_H,,0,0,0-informative,Nêu rõ đâm người vì mâu thuẫn tiếng ồn.
+H079,sweep_H,,0,0,0-informative,Nêu rõ Hoài Lâm đèo cô dâu.
+H083,sweep_pos,,1,1,1-vague,'vai trò mới' không nói là gì.
+H084,sweep_H,,0,0,0-informative,'kiệt quệ' mô tả tình trạng kinh tế.
+H085,sweep_H,,0,0,0-work-title,Tên tác phẩm 'Fast & Furious'.
+H087,sweep_H,,0,0,0-named-quote,"Phát biểu của Tổng Bí thư, Chủ tịch nước."
+H088,sweep_H,,0,0,0-informative,Nêu rõ bảy người rửa tiền nghìn tỷ.
+H089,sweep_H,,0,0,0-informative,Nêu rõ chế tài với tin giả.
+H090,sweep_H,,0,0,0-informative,Nêu rõ Phú Thọ thu hồi hơn 1 tỷ.
+H091,sweep_H,,0,0,0-informative,Nêu rõ lễ cưới vợ chồng Hoài Lâm.
+H092,sweep_H,,0,0,0-named-quote,Phát biểu của ông Trump.
+H093,sweep_H,,0,0,0-informative,'lao đao' mô tả áp lực lãi suất 17-18%.
+H094,sweep_pos,,1,1,1-question,'Ngân hàng nào...' không nêu tên ngân hàng.
+H095,sweep_H,,0,0,0-informative,Nêu rõ Đàm Vĩnh Hưng chúc phúc Hoài Lâm.
+H096,sweep_pos,,1,1,1-vague,'lý giải vì sao' giấu lý do.
+H098,sweep_H,,0,0,0-real-question,Câu hỏi hướng dẫn thực tế 'Tài xế đi thế nào'.
+H099,sweep_H,,0,0,0-informative,Nêu rõ cá mòi chết dạt bờ.
+H100,sweep_H,,0,0,0-informative,Nêu rõ AI khiến 11 triệu người chuyển nghề.
+H102,sweep_H,,0,0,0-informative,Biệt danh 'sầu nữ' đi kèm tên Lana Del Rey.
+H103,sweep_H,,0,0,0-informative,Nêu rõ tỷ lệ hóa chất nguy hại.
+H104,sweep_H,,0,0,0-informative,Nêu rõ êkíp dùng AI sửa cảnh.
+H105,sweep_H,,0,0,0-event-word,'bị bắt' và nêu rõ hành vi.
+H106,sweep_H,,0,0,0-real-question,Câu hỏi 'Có nên gửi tiết kiệm...?'.
+H107,sweep_H,,0,0,0-informative,Biệt danh 'Thiên thần nội y' đi kèm tên Barbara Palvin.
+H108,sweep_H,,0,0,0-informative,Nêu rõ con ông Trần Đình Long mua cổ phiếu.
+H109,sweep_H,,0,0,0-informative,Nêu rõ Hàn Quốc phóng thử vũ khí.
+H110,sweep_H,,0,0,0-event-word,"'qua đời' mô tả sự kiện, có tên."
+H111,sweep_H,,0,0,0-informative,'gây tranh luận' mức nhẹ như 'gây chú ý'.
+H112,sweep_H,,0,0,0-informative,Nêu rõ giá xăng tăng hơn 1.000 đồng.
+H113,sweep_H,,0,0,0-informative,Nêu rõ trộm đồng hồ Rolex.
+H114,sweep_H,,0,0,0-informative,Nêu rõ Nhà Trắng lý giải phát biểu.
+H115,sweep_pos,,1,1,1-vague,'Lý do' không nêu lý do.
+H118,sweep_pos,,1,1,1-nickname,'Sao Mỹ nhân tâm kế' thay tên Thích Vy.
+H119,sweep_H,,0,0,0-informative,Nêu rõ Minh Kiên uống nước bùn khi đóng phim.
+H120,sweep_H,,0,0,0-informative,Nêu rõ thủ đoạn cướp xe.
+H121,sweep_H,,0,0,0-informative,Nêu rõ vợ bị chồng đánh.
+H122,sweep_H,,0,0,0-informative,Nêu rõ vũ khí siêu vượt âm lao xuống biển.
+H123,sweep_H,,0,0,0-informative,"Nêu rõ Lầu Năm Góc bị tố, trích dẫn có nguồn."
+H124,sweep_H,,0,0,0-informative,Nêu rõ bị phát hiện trộm xe qua clip.
+H125,sweep_H,,0,0,0-informative,Nêu rõ cây xăng nhỏ lo bị chèn ép.
+H126,sweep_H,,0,0,0-named-quote,Trích dẫn có chủ thể rõ: Mỹ tuyên bố 'cắt đứt mọi nguồn lực'.
+H127,sweep_H,,0,0,1-nickname,"Ca mơ hồ: 'Hưng Lộc', 'Nam phập' là biệt danh giang hồ mạng công khai mà dư luận biết đến (như nghệ danh), không phải người viết giấu tên; nhất quán với 126 (0) -> giữ 0."
+H128,sweep_H,,0,0,0-informative,"Nêu rõ Thư Kỳ, Song Hye Kyo."
+H129,sweep_pos,,1,1,1-vague,"'Niềm vui, nỗi buồn' mơ hồ, giấu nội dung."
+H130,sweep_H,,0,0,0-informative,Nêu rõ gu mặc của Hoàng hậu Đan Mạch.
+H131,sweep_H,,0,0,0-informative,Nêu rõ tài xế bị phạt 2 triệu.
+H132,sweep_pos,,1,1,1-nickname,'Cô gái cao nhất' thay cho tên Dương Quỳnh Trang.
+H133,sweep_pos,,1,1,2-emotive,'rẻ chưa từng có' là cách nói phóng đại.
+H134,sweep_H,,0,0,0-informative,Nêu rõ chiêu lừa 'cập nhật VNeID cho con'.
+H135,sweep_H,,0,0,0-informative,"Nêu rõ đũa vàng, chén bạc hoàng tộc Chăm."
+H136,sweep_pos,,1,1,1-question,'Vì sao...?' không được trả lời.
+H137,sweep_H,,0,0,0-informative,Nêu rõ tàu dầu Iran mắc kẹt.
+H139,sweep_H,,0,0,0-informative,Nêu rõ Bitcoin tăng 40%.
+H140,sweep_H,,0,0,0-informative,Nêu rõ sự việc nhân viên bị sa thải.
+H141,sweep_H,,0,0,0-event-word,'bị sát hại' mô tả sự kiện.
+H142,sweep_H,,0,0,0-work-title,"Tên phim 'Hợp long', nhận xét có nguồn."
+H143,sweep_H,,0,0,0-informative,Nêu rõ cho thuê tài khoản cho đường dây đánh bạc.
+H144,sweep_pos,,1,0,0-informative,"Thông tin chính nêu đủ (sân bay dùng gió trời thay điều hòa); 'xứ nóng' chỉ là mô tả vùng, không gợi tò mò đáng kể."
+H145,sweep_H,,0,0,0-informative,Nêu rõ Nga dỡ cách ly; 'viêm phổi lạ' là thuật ngữ.
+H146,sweep_H,,0,1,2-emotive,2-emotive: 'gây rung chuyển nước Pháp' là ẩn dụ phóng đại do người viết chọn.
+H147,sweep_H,,0,0,0-informative,Nêu rõ Bitget bị hack 388 triệu USD.
+H148,sweep_H,,0,0,0-named-quote,Trích dẫn của ông Trump.
+H149,sweep_pos,,1,1,1-vague,'Lộ diện danh tính bất ngờ' giấu danh tính.
+H150,sweep_H,,0,0,0-informative,Nêu rõ Pháp ngừng dùng lựu đạn gây choáng.
+H153,sweep_H,,0,0,0-informative,Nêu rõ Britney Spears đi chơi cùng con.
+H154,sweep_H,,0,0,0-informative,Nêu rõ Đông Hùng khóc khi nói về mẹ.
+H155,sweep_H,,0,0,0-named-quote,Trích dẫn của Phương Nam.
+H156,sweep_H,,0,0,0-informative,Nêu rõ mức án đề nghị hơn 17 năm.
+H157,sweep_pos,,1,1,2-emotive,'mẹ hiền' dùng mỉa mai trong ngoặc.
+H158,sweep_H,,0,0,0-informative,Nêu rõ sự việc 'ngân hàng Hàn Quốc bị tấn công mạng'.
+H159,sweep_H,,0,0,0-informative,Nêu rõ SpaceX vay 40 tỷ USD mua chip.
+H160,sweep_H,,0,0,0-named-quote,Trích dẫn của Steven Nguyễn.
+H162,sweep_H,,0,0,1-nickname,"Ca mơ hồ: 'Báo Berry' là nghệ danh mặt nạ chính thức của chương trình, tên thật chưa được công bố nên không phải người viết giấu tên -> 0."
+H163,sweep_H,,0,0,0-real-question,Câu hỏi pháp lý 'người thuê có phải dọn đi?'.
+H164,sweep_H,,0,0,0-event-word,'khởi tố' mô tả sự kiện.
+H165,sweep_pos,,1,1,2-emotive,"'Dã tâm' cảm xúc, giấu nội dung."
+H166,sweep_H,,0,0,0-named-quote,Trích dẫn của Quách Ngọc Ngoan.
+H167,sweep_H,,0,0,0-informative,Nêu rõ liên doanh AI của Kido làm phim.
+H168,sweep_H,,0,0,1-nickname,"Ca mơ hồ: 'Dũng trọc Hà Đông', 'Thật Mạnh' là biệt danh giang hồ mạng công khai, nhất quán với 126, 189 (0) -> giữ 0."
+H169,sweep_pos,,1,1,2-emotive,Ẩn dụ 'biệt thự ác mộng'.
+H171,sweep_H,,0,0,0-event-word,'bị bắt' và nêu rõ hành vi.
+H172,sweep_H,,0,0,0-real-question,Câu hỏi pháp lý 'Công ty có quyền...?'.
+H173,sweep_H,,0,0,0-informative,Nêu rõ SCB còn 10 điểm giao dịch.
+H174,sweep_H,,0,0,2-emotive,"Ca mơ hồ: 'thổi bùng bất bình' là cụm báo chí quen dùng mô tả phản ứng có thật, nhất quán với 236 'châm ngòi cho làn sóng bất bình' (0) -> giữ 0."
+H175,sweep_H,,0,0,0-informative,Nêu rõ lời khai của Hoàng Nato.
+H176,sweep_H,,0,0,0-named-quote,Thông tin có nguồn 'Hãng tin Mỹ'.
+H178,sweep_H,,0,0,0-informative,Nêu rõ khoản nợ 600 tỷ của Ba Huân.
+H179,sweep_pos,,1,1,2-emotive,Ẩn dụ 'như tra tấn' do người viết chọn.
+H180,sweep_H,,0,0,0-informative,"'gây chú ý' mức nhẹ, nêu rõ sự việc."
+H181,sweep_H,,0,0,0-informative,Nêu rõ ông Trump hứng chỉ trích.
+H182,sweep_H,,0,0,1-question,"Giữ 0: câu hỏi dự báo kinh tế thật (cùng loại 137 'Thị trường dầu sẽ ra sao...?' đang là 0), không giấu một sự thật đã có."
+H183,sweep_H,,0,0,0-informative,Nêu rõ đề xuất 'không khả thi'.
+H184,sweep_H,,0,0,0-informative,"Nêu rõ Quỳnh Anh, có tên."
+H185,sweep_H,,0,0,0-informative,Nêu rõ ông Trump muốn biến sân golf thành 'Trại David mới'.
+H186,sweep_H,,0,0,0-informative,"Trích dẫn quan điểm, không giật gân."
+H187,sweep_H,,0,0,0-real-question,Câu hỏi pháp lý của độc giả về tiền thưởng.
+H188,sweep_H,,0,0,0-informative,Nêu rõ pháo hoa mừng Ngày Giải phóng Thủ đô.
+H189,sweep_H,,0,0,0-work-title,Tên tác phẩm 'Để thanh thản khi về già'.
+H190,sweep_H,,0,0,0-informative,Nêu rõ cái chết của thiếu niên bị coi là 'kẻ phản bội'.
+H191,sweep_H,,0,0,0-event-word,Nêu rõ mẹ ruột khiến con gái 'tử vong'.
+H192,sweep_H,,0,0,0-informative,Nêu rõ nhập khẩu Mỹ cao kỷ lục.
+H193,sweep_H,,0,0,0-informative,Nêu rõ phong cách cháu ngoại ông Trump.
+H194,sweep_pos,,1,1,1-question,'Vì sao...?' không được trả lời.
+H195,sweep_pos,,1,1,1-vague,"'Lý do' không nêu, kèm 'trật lất'."
+H196,sweep_H,,0,0,0-informative,Nêu rõ hỗ trợ 50% lãi vay.
+H197,sweep_H,,0,0,0-informative,Nêu rõ ngư dân thoát chết sau 8 giờ.
+H198,sweep_pos,,1,1,1-vague,'Cảnh vệ bí ẩn' giấu tên Chu Hồng Húc.
+H199,sweep_H,,0,0,0-informative,Nêu rõ Fed có thể tăng lãi suất.
+H200,sweep_H,,0,0,0-informative,Nêu rõ ảnh cưới của Anh Thư.
+H201,sweep_H,,0,0,0-informative,'sai lầm nghiêm trọng' là nhận định của tòa.
+H202,sweep_pos,,1,1,1-question,'Vì sao...?' không được trả lời trong tiêu đề.
+H204,sweep_H,,0,0,0-informative,Nêu rõ chuyên gia thận trọng với giá vàng.
+H205,sweep_pos,,1,1,1-question,'Những nước nào...?' không nêu tên nước.
+H206,sweep_H,,0,0,0-named-quote,Phát biểu của ông Trump.
+H207,sweep_H,,0,0,0-informative,Biệt danh 'Nữ hoàng tạo dáng' đi kèm tên Coco Rocha.
+H208,sweep_H,,0,0,0-real-question,"Câu hỏi pháp lý về quyền hội thẩm, thẩm phán."
+H209,sweep_H,,0,0,0-informative,"Trích dẫn nội dung tín dụng, không giật gân."
+H210,sweep_H,,0,0,0-real-question,Câu hỏi pháp lý 'người góp vốn có bị xử lý?'.
+H211,sweep_H,,0,0,0-event-word,'bị bắt'; 'Breaking bad' là so sánh tác phẩm.
+H212,sweep_H,,0,0,0-informative,Biệt danh 'Thần đèn' đi kèm tên Tuấn.
+H213,sweep_H,,0,0,0-informative,'Lời kể của người khống chế kẻ chém 3 mẹ con' nêu rõ chủ đề.
+H214,sweep_pos,,1,1,1-question,'có gì để...?' không được trả lời.
+H215,sweep_H,,0,0,0-informative,Nêu rõ bị phạt vì xúc phạm người khác.
+H216,sweep_pos,,1,1,1-question,Ẩn dụ 'Cuộc chiến vô hình' và '... thế nào' không trả lời.
+H217,sweep_H,,0,0,0-informative,'vật lộn 8 giờ giữa biển' mô tả sự việc.
+H218,sweep_pos,,1,1,1-vague,'Ẩn ý' và 'người nổi tiếng' giấu thông tin.
+H219,sweep_H,,0,0,0-informative,Nêu rõ F88 khai trương cửa hàng thứ 1.000.
+H220,sweep_H,,0,0,0-informative,Nêu rõ lao động hồi hương lại chọn đi.
+H221,sweep_H,,0,0,2-emotive,"Ca mơ hồ: 'thổi bùng tranh luận' cùng loại 'gây tranh luận' (060, 0) và 236 (0) -> giữ 0."
+H222,sweep_H,,0,0,0-informative,Nêu rõ tử tù phải dùng máy thở.
+H223,sweep_H,,0,0,0-informative,Nêu rõ SJC được giao lãi 1.000 tỷ.
+H224,sweep_H,,0,0,0-informative,Nêu rõ người Việt tiết kiệm khi mua lồng đèn.
+H225,sweep_H,,0,0,0-informative,Nêu rõ bị tống tiền bằng clip cắt ghép.
+H226,sweep_H,,0,0,0-informative,Nêu rõ Hàn Quốc chưa hài lòng.
+H227,sweep_H,,0,0,0-informative,Nêu rõ Vietnam iContent mở rộng quy mô.
+H229,sweep_H,,0,0,0-informative,Nêu rõ tài xế đưa bé gái đến công an.
+H230,sweep_H,,0,0,0-work-title,Tên tác phẩm 'Phía đông vườn địa đàng'.
+H231,sweep_pos,,1,0,0-informative,Sự việc nêu đủ (thua kiện khi đòi lại gần 6 triệu USD); người không nêu tên nhưng sự việc rõ (tiền lệ 227).
+H232,sweep_H,,0,0,0-informative,Nêu rõ phá án nhờ kẹo cao su.
+H233,sweep_pos,,1,1,1-vague,'Lý do' không nêu lý do.
+H234,sweep_pos,,1,1,1-nickname,'Siêu mẫu đắt giá nhất Trung Quốc' thay tên Lưu Văn.
+H235,sweep_H,,0,0,0-informative,"'vô vị' là nhận xét của giới chuyên môn, không phóng đại."
+H236,sweep_H,,0,0,0-event-word,'thiệt mạng' mô tả sự kiện.
+H237,sweep_H,,0,0,0-informative,"Trích dẫn nội dung chính sách, không giật gân."
+H238,sweep_H,,0,0,0-informative,Nêu rõ không gian tiệc cưới Hoài Lâm.
+H239,sweep_H,,0,0,0-informative,Nêu rõ Hồng Đào hát 'Xuân thì'.
+H240,sweep_H,,0,0,0-informative,"Nêu rõ lật thuyền, vợ chồng mất tích."
+H241,sweep_H,,0,0,1-question,"Giữ 0: câu hỏi phân tích tác động thật, cùng loại 'Các nước quản lý giá ... như thế nào?' (0); quy ước 'thế nào/ra sao' -> 0."
+H242,sweep_H,,0,0,0-informative,Nêu rõ vợ chồng Brooklyn Beckham ở Paris.
+H244,sweep_H,,0,0,0-informative,Nêu rõ Tennessee muốn tăng dùng ghế điện.
+H245,sweep_H,,0,0,1-nickname,"Ca mơ hồ: 'Rabibuum' là nghệ danh mặt nạ chính thức của 'Ca sĩ mặt nạ', tên thật chưa công bố -> 0 (giống H162)."
+H246,sweep_H,,0,0,0-informative,"Nêu chủ đề chiến lược của Vinamilk, không giật gân."
+H247,sweep_H,,0,0,0-real-question,Câu hỏi 'Có nên ký cam kết...?'.
+H248,sweep_pos,,1,1,1-list,'Loạt chiêu thức' không nói gồm gì.
+H249,sweep_H,,0,0,0-named-quote,Trích dẫn của em gái Đặng Văn Lâm.
+H250,sweep_H,,0,0,0-informative,Nêu rõ sự việc thuê 9 người ám sát vợ.
