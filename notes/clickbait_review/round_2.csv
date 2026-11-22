@@ -1,0 +1,31 @@
+﻿id,group,score,old,new,rule,reason
+024,sure_1,1.4938,0,0,0-informative,Nêu rõ sự việc 'tử tù Mỹ phải ngồi ghế điện hai lần' sau vụ hành quyết thất bại.
+364,sure_1,1.1246,1,1,1-vague,'siêu mẫu giàu nhất Trung Quốc' thay cho tên thật Lưu Văn để gây tò mò.
+149,sure_1,1.1181,0,0,0-informative,Nêu rõ sự việc 'chồng đốt nhà' vì vợ uống bia không về.
+H243,sure_1,1.0368,1,1,1-question,Câu hỏi 'Vì sao Gò Vấp địa hình cao vẫn ngập nặng?' không được trả lời trong tiêu đề.
+H097,sure_1,1.0002,0,0,0-real-question,Câu hỏi hướng dẫn thực sự 'Lưu ý gì khi đầu tư trái phiếu?'.
+052,sure_1,0.9877,1,1,1-question,Câu hỏi 'Vì sao...?' không được trả lời trong tiêu đề.
+170,sure_1,0.9687,1,1,1-question,'Hãng đứng sau game PUBG' giấu tên Krafton và câu hỏi 'kinh doanh ra sao?' không được trả lời.
+H151,sure_1,0.956,1,1,1-list,"'Những kiểu áo khoác hot' là danh sách không nói nội dung, kèm từ 'hot'."
+H161,sure_1,0.8977,0,0,0-work-title,"'dấu vân tay' lấy từ tên sách 'Dấu vân tay của phố', tác giả được nêu tên."
+H009,sure_1,0.8497,0,0,0-real-question,Câu hỏi tư vấn pháp lý cá nhân 'có quyền yêu cầu khử nhận dạng không?'.
+318,sure_0,-2.0716,0,0,0-informative,Nêu rõ cổ phiếu sàn Hà Nội 'chuyển sang HoSE từ 28/12'.
+261,sure_0,-1.9561,0,0,0-event-word,"Nêu rõ giám đốc Vintechpharm 'bị khởi tố' vụ 1,2 triệu lọ C sủi giả."
+468,sure_0,-1.9368,0,0,0-informative,Nêu rõ 'lỗ hổng an ninh' trong vụ 'cơ phó flydubai' cướp máy bay.
+402,sure_0,-1.9325,0,0,0-event-word,Nêu rõ 'tài xế xe ben bị điều tra' vì tông sập biển báo cao tốc.
+313,sure_0,-1.905,0,0,0-informative,Nêu rõ 'Khởi công cầu Cát Lái và Long Hưng'.
+161,sure_0,-1.9048,0,0,0-informative,"Nêu rõ Hoàn Mỹ 'báo lãi kỷ lục', 'kỷ lục' là dữ kiện có thật."
+230,sure_0,-1.8743,0,0,0-informative,"Nêu tên 'Phí Linh'; 'MC đa sắc' là mô tả nhẹ, không phải biệt danh thay tên hay từ giật gân."
+025,sure_0,-1.8706,0,0,0-work-title,"'Risky Business' là tên phim trong ngoặc, Tom Cruise được nêu tên."
+472,sure_0,-1.8454,0,0,0-informative,Nêu rõ dự án safari Ba Vì giảm xuống '300 ha'.
+348,sure_0,-1.8229,0,0,0-informative,Nêu rõ 'Di dời loạt trụ điện' giữa đường mở rộng ở TP HCM.
+343,uncertain,0.1326,0,0,1-question,"Ca mơ hồ: câu hỏi thông tin dịch vụ thực tế (phí đi cao tốc), cùng loại với Làm ... thế nào? / Lưu ý gì...? -> 0 (khác Vì sao...? gợi tò mò)."
+244,uncertain,0.133,0,0,0-informative,Nêu tên Tường San và sự kiện The Face Thái Lan; 'gây chú ý' là mức nhẹ.
+090,uncertain,0.1337,1,1,1-vague,"'Cả gia đình gặp họa vì ác tâm của kẻ thuê nhà' giấu ai, ở đâu, chuyện gì; 'gặp họa', 'ác tâm' mang tính cảm xúc."
+466,uncertain,0.124,1,1,1-nickname,"Biệt danh 'Cẩu tặc' thay cho nhóm thanh niên không được nêu tên, là từ ngữ giật gân do người viết chọn."
+272,uncertain,0.1414,1,1,1-vague,"'Cách bà trùm 7 tiền án 'chăm lo'' giấu cách thức và tên (Mai Anh), dùng ngoặc mỉa mai để gây tò mò."
+H152,uncertain,0.1474,0,0,0-event-word,"Nêu rõ sự việc 'Đua xe trên quốc lộ 1, một thanh niên tử vong'."
+H054,uncertain,0.1504,0,0,0-informative,Nêu tên bà Mai Kiều Liên và danh sách 'Top 100 phụ nữ quyền lực châu Á'.
+227,uncertain,0.1102,0,0,0-informative,"Nêu rõ sự việc 'dì rủ cháu đi trả thù' sau khi bị cưỡng bức, không dùng từ giật gân."
+114,uncertain,0.1566,1,1,2-emotive,"Cụm 'mặc như không' do người viết chọn mang tính giật gân, 'Dàn sao' không nêu tên."
+065,uncertain,0.163,0,0,0-informative,Nêu tên thật 'Ngô Diễm Ni'; 'mỹ nhân điền kinh' là mô tả đi kèm tên.
