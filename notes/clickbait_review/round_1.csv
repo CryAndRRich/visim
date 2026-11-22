@@ -1,0 +1,31 @@
+﻿id,group,score,old,new,rule,reason
+H116,sure_1,2.7591,1,1,1-vague,'Lý do' ... 'gây sốt' giấu thông tin chính để kích thích tò mò.
+248,sure_1,2.4038,1,1,1-question,"Câu hỏi tò mò 'Điều gì khiến...' không trả lời, kèm 'nghiện'."
+H228,sure_1,2.1148,1,1,2-emotive,'Cô gái thất nghiệp đổi đời' giấu tên nhân vật và dùng từ cường điệu 'đổi đời'.
+H117,sure_1,1.9611,1,1,1-vague,'Lý do' ... 'gây sốt' giấu thông tin chính để kích thích tò mò.
+353,sure_1,1.7536,1,1,2-emotive,'Dàn diễn viên gây sốt' không nêu tên diễn viên và dùng từ cường điệu.
+351,sure_1,1.7168,0,0,0-real-question,Câu hỏi tư vấn thật 'chồng nên làm gì?'.
+H138,sure_1,1.5591,1,1,2-emotive,"Từ ngữ giật gân 'Sự thật lạnh gáy', 'gã đào hoa', 'chết bí ẩn', giấu tên nhân vật."
+H170,sure_1,1.4202,0,0,0-named-quote,'có bất ngờ lớn' là lời trích của người nói được nêu tên là ông Trump.
+439,sure_1,1.3666,1,1,2-emotive,Người viết dùng 'gây sốt' để cường điệu sức hút của video.
+H081,sure_1,1.2502,0,0,0-real-question,Câu hỏi tư vấn pháp lý thật 'tôi đòi lại thế nào khi chia tay?'.
+062,sure_0,-2.557,0,0,0-informative,Tiêu đề khách quan 'mở rộng hợp tác xử lý án công nghệ cao'.
+089,sure_0,-2.1075,0,0,0-informative,Nêu rõ 'Cơ quan LHQ lên án việc Mỹ định phát trực tiếp xử bắn'.
+455,sure_0,-2.0677,0,0,0-informative,"Nêu rõ sự việc 'hầm xe khu biệt thự ở TP HCM ngập 1,5 mét'."
+465,sure_0,-2.0569,0,0,0-informative,Nêu rõ người và sự việc 'Kim Tiến vắng mặt trong phiên kháng cáo'.
+146,sure_0,-1.9597,0,0,0-informative,"Nêu rõ người, mức án '19 năm tù' và vụ việc."
+283,sure_0,-1.9582,0,0,0-informative,"'5 chức danh lãnh đạo Đảng, Nhà nước' là thông tin chính sách, nêu rõ loại đối tượng."
+395,sure_0,-1.937,0,0,0-informative,"'Thẩm phán nằm trên giường để xử án' mô tả đúng sự việc, không dùng từ giật gân."
+314,sure_0,-1.9069,0,0,0-informative,Nêu rõ 'Nga thử nghiệm rào chắn khí cầu để chặn UAV Ukraine'.
+222,sure_0,-1.9027,0,0,0-event-word,"Từ chỉ sự kiện '9 người bị khởi tố', nêu rõ vụ án."
+203,sure_0,-1.8777,0,0,0-informative,"Nêu rõ kết quả 'bị cáo án treo, bồi thường gần 700.000 đồng'."
+342,uncertain,0.4258,0,0,0-informative,Nêu rõ sự việc 'cha làm rơi con từ cửa sổ tầng 4'.
+H080,uncertain,0.4261,0,0,0-work-title,'Người đua diều' là tên tác phẩm trong ngoặc.
+H203,uncertain,0.4223,1,1,1-list,"'4 ứng viên nổi bật' không nêu tên các ứng viên, gây tò mò."
+H004,uncertain,0.4305,0,0,0-named-quote,Trích lời có người nói được nêu tên 'Đạo diễn Quang Dũng'.
+H086,uncertain,0.4319,0,0,0-informative,Nêu rõ 'Brad Pitt kéo bạn gái vào chụp ảnh chung'.
+H048,uncertain,0.4321,0,0,0-informative,"Biệt danh 'Đường Tăng' đi kèm tên thật La Gia Anh, nội dung 'lo kiếm tiền chữa bệnh' rõ ràng."
+H177,uncertain,0.4168,0,0,0-named-quote,Trích lời của người được xác định rõ 'Cơ phó flydubai'.
+H082,uncertain,0.436,0,0,0-informative,Nêu rõ 'Ivanka Trump mặc váy của nhà mốt Trung Quốc dự quốc yến'.
+196,uncertain,0.4113,0,0,0-informative,Mô tả trực tiếp hành vi 'ép con của bạn trai uống thuốc diệt chuột'.
+H101,uncertain,0.4409,0,1,1-nickname,1-nickname: biệt danh 'Mẹ đẻ' thay cho tên thật nhà sáng lập Particle 6 (không nêu tên trong tiêu đề); trích dẫn vì thế cũng không có người nói được nêu tên.
