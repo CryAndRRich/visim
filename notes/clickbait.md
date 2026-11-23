@@ -2,9 +2,9 @@
 
 Phụ trách: Kiên. Branch `clickbait-kien`. Mọi số liệu dưới đây chép từ `results/clickbait/` (không đưa lên git).
 
-> **Trạng thái:** phần chạy trên máy cá nhân đã xong (mốc, cổ điển, ablation, model cuối, `corpus_labels.csv`).
-> Mức học sâu (PhoBERT) và LLM (Qwen) **chưa chạy**: notebook đã sẵn sàng, xem [notebooks/README_kaggle.md](../notebooks/README_kaggle.md).
-> Chạy xong thì điền mục 4.4 và cập nhật mục 5 nếu có model tốt hơn.
+> **Trạng thái:** đã xong mức mốc, cổ điển, ablation, LLM (Qwen, chạy trên Kaggle), model cuối và `corpus_labels.csv`.
+> Mức học sâu (PhoBERT) **chưa chạy**: notebook đã sẵn sàng, xem [notebooks/README_kaggle.md](../notebooks/README_kaggle.md).
+> Chạy xong thì điền mục 4.4 và cập nhật mục 5 nếu PhoBERT tốt hơn.
 
 ## 1. Dữ liệu
 
@@ -85,7 +85,7 @@ Mọi model dùng seed 42. Model cổ điển chạy trên máy cá nhân: macOS
 | Cổ điển | TF-IDF n-gram từ (1–2) cộng ký tự `char_wb` (2–5), sublinear; LR, Linear SVM, Complement NB | title / title+sapo | ViClickbait | GridSearch CV 5 phần trên train, chấm theo F1: LR C=10, SVM C=1, NB α=0,1 | toàn bộ `ladder` khoảng 2 phút |
 | Cổ điển (trong miền) | TF-IDF + LR; đặc trưng viết tay + LR; **TF-IDF kết hợp đặc trưng viết tay + LR** | title | dev (oof), hoặc ViClickbait + dev (oof) | CV lồng: vòng ngoài 5 phần trên dev; vòng trong 5 phần trên phần dev của fold huấn luyện, chọn C ∈ {0,3; 1; 3; 10; 30} theo PR-AUC và chọn ngưỡng tối ưu F1 | 3–12 s (chỉ dev), 27–200 s (cả ViClickbait) |
 | Học sâu | `vinai/phobert-base-v2` fine-tune: 4 epoch, lr 2e-5, batch 32, 3 seed (42, 43, 44); có hoặc không tách từ; title hoặc title+sapo | | ViClickbait (90%, 10% giữ lại để chọn ngưỡng); ViClickbait + dev (oof) | | **chưa chạy** (Kaggle T4, ước tính 25–40 phút) |
-| LLM | `Qwen2.5-7B-Instruct` 4-bit và `1.5B`: zero-shot, few-shot k ∈ {0, 4, 8, 16} lấy từ phần VnExpress của ViClickbait, few-shot theo độ tương tự, CoT | title | không học | | **chưa chạy** (ước tính 1,5–2,5 giờ) |
+| LLM | `Qwen2.5-7B-Instruct` 4-bit và `1.5B`: zero-shot, few-shot k ∈ {0, 4, 8, 16} lấy từ phần VnExpress của ViClickbait, few-shot theo độ tương tự, CoT | title | không học | Giải mã tham lam; score = P("1") / (P("0") + P("1")) ở token nhãn; ngưỡng 0,5; CoT sinh tối đa 200 token; batch 8 | Kaggle, 1 GPU Tesla T4; torch 2.11 (cu130), transformers 5.20.2, bitsandbytes 0.50.2. 7B: nạp model 116 s, chiếm 5,9 GB GPU; mỗi chế độ không CoT 3,5–8 phút, CoT 28 phút, chấm corpus khoảng 10 phút. 1.5B: 0,8–3 phút mỗi chế độ |
 
 ## 4. Kết quả
 
@@ -148,13 +148,38 @@ Bootstrap 1.000 lần, khoảng tin cậy 95%. Mọi điểm tính trên nhãn s
 
 Ghi chú: bản TF-IDF+LR chỉ học trên dev trong `extras` dùng ngưỡng 0,5. Bản này có PR-AUC 0,468 nhưng F1 chỉ 0,273, vì chỉ 2,8% mẫu được dự đoán dương. Điều đó cho thấy việc chọn ngưỡng ở vòng trong quan trọng thế nào.
 
-### 4.4 Học sâu và LLM (Kaggle): chưa chạy
+### 4.4 LLM: Qwen2.5-Instruct (Kaggle, không học, chấm trên toàn bộ dev)
 
-Sau khi tải kết quả về `results/clickbait/kaggle/`, chạy `python -m src.classifiers.clickbait collect` rồi chép bảng `results/clickbait/ladder_full.csv` vào đây:
-- PhoBERT tách từ / không tách từ / title+sapo: mean ± std qua 3 seed.
-- PhoBERT ViClickbait + dev (oof).
-- Ensemble TF-IDF + PhoBERT.
-- Qwen 7B và 1.5B: zero, few k=4/8/16, few theo độ tương tự, CoT.
+Điểm tính lại bằng lệnh `collect` trên nhãn cuối. Ví dụ few-shot lấy từ phần VnExpress của ViClickbait, không lấy từ dev. Hai cấu hình few0 và few8 trùng với zero và few nên không lặp lại trong bảng.
+
+| Model | Chế độ | F1 [CI95] | PR-AUC [CI95] | Tỷ lệ dự đoán dương | Thời gian |
+|---|---|---|---|---|---|
+| 7B 4-bit | zero-shot | **0,406** [0,312–0,498] | 0,338 [0,252–0,441] | 0,131 | 201 s |
+| 7B | few-shot k=4 | 0,392 [0,324–0,454] | 0,327 [0,253–0,437] | 0,351 | 276 s |
+| 7B | few-shot k=8 | 0,402 [0,335–0,469] | 0,334 [0,259–0,440] | 0,332 | 346 s |
+| 7B | few-shot k=16 | 0,384 [0,321–0,444] | 0,335 [0,259–0,443] | 0,409 | 480 s |
+| 7B | few-shot 8 ví dụ giống nhất (TF-IDF ký tự) | 0,362 [0,295–0,420] | **0,344** [0,261–0,459] | 0,389 | 342 s |
+| 7B | CoT (8 ví dụ, 0,1% đầu ra không đọc được nhãn) | 0,357 [0,276–0,431] | 0,291 [0,219–0,386] | 0,217 | 1.687 s |
+| 1.5B fp16 | zero-shot | 0,214 [0,179–0,250] | 0,222 [0,170–0,301] | 0,992 | 47 s |
+| 1.5B | few-shot k=4 | 0,221 [0,184–0,257] | 0,304 [0,227–0,402] | 0,956 | 64 s |
+| 1.5B | few-shot k=8 | 0,235 [0,196–0,273] | 0,327 [0,242–0,421] | 0,891 | 81 s |
+| 1.5B | few-shot k=16 | 0,236 [0,194–0,273] | 0,243 [0,182–0,327] | 0,832 | 109 s |
+| 1.5B | few-shot theo độ tương tự | 0,215 [0,179–0,251] | 0,292 [0,211–0,388] | 0,985 | 80 s |
+| 1.5B | CoT | 0,322 [0,269–0,375] | 0,339 [0,250–0,436] | 0,552 | 182 s |
+
+**Nhận xét:**
+- **Qwen 7B kém hơn model cuối.** F1 tốt nhất 0,406 và PR-AUC 0,34, so với 0,553 / 0,573 của model cuối, và khoảng tin cậy PR-AUC không chồng nhau. Qwen 7B chỉ ngang mức TF-IDF học trên ViClickbait và luật từ khóa.
+- **Few-shot không giúp gì.** Tăng k chỉ làm model gán dương nhiều hơn (13% → 41%). Lý do là ví dụ lấy từ ViClickbait, mà nhãn của bộ này lệch với định nghĩa của nhóm.
+- **CoT kém hơn không có CoT.** Lời giải thích hay mâu thuẫn với chính nhãn model đưa ra (xem mục 6).
+- **1.5B gần như gán 1 cho mọi tiêu đề** (89–99%). Nó gần như không làm được việc này, chỉ CoT là đỡ hơn. **Bản 7B đáng chi phí hơn 1.5B rõ rệt.**
+- Corpus chấm bằng few-shot 7B (`corpus_scores_qwen.csv`): 26,2% tiêu đề bị gán dương, riêng phần ngoài dev là 15,6%. Trên 494 bài ngoài dev, Qwen trùng nhãn với model cuối 84,6%.
+
+### 4.5 Học sâu: PhoBERT (chưa chạy)
+
+Sau khi tải kết quả PhoBERT về `results/clickbait/kaggle/`, chạy `collect` rồi chép vào đây các mục sau:
+- PhoBERT tách từ / không tách từ / title+sapo (mean ± std qua 3 seed);
+- PhoBERT ViClickbait + dev (oof);
+- ensemble TF-IDF + PhoBERT.
 
 ## 5. Model cuối
 
@@ -176,7 +201,7 @@ Sau khi tải kết quả về `results/clickbait/kaggle/`, chạy `python -m sr
 - 750 bài trong dev giữ nhãn sửa tay; model đồng ý với 99,1% số này vì đã học trên chúng.
 - 494 bài ngoài dev: model gán 4,7% là clickbait. Phần này đã bị rút bớt mẫu dương khi chọn nhóm H, nên tỷ lệ thấp hơn mức 10% của phần dev ngẫu nhiên là hợp lý.
 
-**Nếu PhoBERT hoặc Qwen cho kết quả tốt hơn rõ** (khoảng tin cậy không chồng nhau), chạy `final --from-file results/clickbait/kaggle/corpus_scores_<config>.csv`. Nếu không, giữ model hiện tại vì nó đơn giản hơn.
+Qwen đã chạy và kém hơn rõ (mục 4.4), nên không đổi model. **Nếu PhoBERT cho kết quả tốt hơn rõ** (khoảng tin cậy không chồng nhau), chạy `final --from-file results/clickbait/kaggle/corpus_scores_<config>.csv`. Nếu không, giữ model hiện tại vì nó đơn giản hơn.
 
 ## 6. Phân tích lỗi
 
@@ -207,7 +232,12 @@ Phân tích này dựa trên model cuối, chấm out-of-fold trên dev.
 - **Học trong miền:** 600 nhãn dev mỗi fold đã vượt 3.414 nhãn ViClickbait. Đường cong học vẫn còn tăng ở mức 100% dev, nên thêm nhãn VnExpress sẽ còn có lợi.
   - Chi phí: vài giây trên CPU, không cần GPU.
   - Hạn chế: khoảng tin cậy rộng (khoảng ±0,1) vì chỉ có 89 mẫu dương.
-- **PhoBERT và Qwen:** chưa có kết quả. Kỳ vọng các model này xử lý được nhóm FN cần hiểu ngữ nghĩa. Chi phí GPU dự kiến khoảng 0,5 giờ cho PhoBERT và 2 giờ cho Qwen.
+- **Qwen (LLM):** không cần nhãn, nhưng tốn GPU nhất (khoảng 1,5 giờ T4 cho cả bản 7B và 1.5B) mà vẫn kém model cổ điển học trên 750 nhãn dev.
+  - Qwen hiểu sai định nghĩa theo hai kiểu ngược nhau.
+  - Kiểu 1, coi tin bình thường là clickbait: 025 *Tom Cruise tái hiện điệu nhảy trong 'Risky Business'* (cho là "gợi tò mò"), 028 (cho "trang sức từng tặng" là đại từ mơ hồ), 023.
+  - Kiểu 2, bỏ qua dấu hiệu thật: 016 *... bị Iran 'đánh tan hoang'*, 006 *Những lời đầu tiên của tử tù...*.
+  - CoT có lúc tự mâu thuẫn. Ở 015, lời giải thích nói tiêu đề "dùng từ ngữ cảm xúc" nhưng vẫn kết luận nhãn 0. Ở 025, lời giải thích nói "không phải cường điệu" nhưng lại gán nhãn 1.
+- **PhoBERT:** chưa có kết quả. Chi phí GPU dự kiến khoảng 0,5 giờ.
 
 ## 7. Chạy lại
 
