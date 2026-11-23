@@ -2,9 +2,8 @@
 
 Phụ trách: Kiên. Branch `clickbait-kien`. Mọi số liệu dưới đây chép từ `results/clickbait/` (không đưa lên git).
 
-> **Trạng thái:** đã xong mức mốc, cổ điển, ablation, LLM (Qwen, chạy trên Kaggle), model cuối và `corpus_labels.csv`.
-> Mức học sâu (PhoBERT) **chưa chạy**: notebook đã sẵn sàng, xem [notebooks/README_kaggle.md](../notebooks/README_kaggle.md).
-> Chạy xong thì điền mục 4.4 và cập nhật mục 5 nếu PhoBERT tốt hơn.
+> **Trạng thái:** đã chạy đủ mọi mức model: mốc, cổ điển, học sâu (PhoBERT), LLM (Qwen). Đã có ablation, model cuối và `corpus_labels.csv`.
+> PhoBERT và Qwen chạy trên Kaggle theo [notebooks/README_kaggle.md](../notebooks/README_kaggle.md).
 
 ## 1. Dữ liệu
 
@@ -84,7 +83,7 @@ Mọi model dùng seed 42. Model cổ điển chạy trên máy cá nhân: macOS
 | Mốc | Đặc trưng viết tay + LR: độ dài ký tự và từ, `?`, `!`, số chữ số, dấu ngoặc kép, `:`, tỷ lệ chữ hoa, số từ khóa khớp; có StandardScaler | title | ViClickbait | C ∈ {0,01; 0,1; 1; 10} chọn bằng CV 5 phần trên train → C=10 | 3 s |
 | Cổ điển | TF-IDF n-gram từ (1–2) cộng ký tự `char_wb` (2–5), sublinear; LR, Linear SVM, Complement NB | title / title+sapo | ViClickbait | GridSearch CV 5 phần trên train, chấm theo F1: LR C=10, SVM C=1, NB α=0,1 | toàn bộ `ladder` khoảng 2 phút |
 | Cổ điển (trong miền) | TF-IDF + LR; đặc trưng viết tay + LR; **TF-IDF kết hợp đặc trưng viết tay + LR** | title | dev (oof), hoặc ViClickbait + dev (oof) | CV lồng: vòng ngoài 5 phần trên dev; vòng trong 5 phần trên phần dev của fold huấn luyện, chọn C ∈ {0,3; 1; 3; 10; 30} theo PR-AUC và chọn ngưỡng tối ưu F1 | 3–12 s (chỉ dev), 27–200 s (cả ViClickbait) |
-| Học sâu | `vinai/phobert-base-v2` fine-tune: 4 epoch, lr 2e-5, batch 32, 3 seed (42, 43, 44); có hoặc không tách từ; title hoặc title+sapo | | ViClickbait (90%, 10% giữ lại để chọn ngưỡng); ViClickbait + dev (oof) | | **chưa chạy** (Kaggle T4, ước tính 25–40 phút) |
+| Học sâu | `vinai/phobert-base-v2` fine-tune: 4 epoch, lr 2e-5, batch 32, 3 seed (42, 43, 44); có hoặc không tách từ; title hoặc title+sapo | | ViClickbait (90%, 10% giữ lại để chọn ngưỡng); ViClickbait + dev (oof, chỉ seed 42) | warmup 10%, weight decay 0,01, fp16, cắt gradient 1,0; max_len 64 (title) / 160 (title+sapo) | Kaggle, 1 GPU Tesla T4; torch 2.11 (cu130), transformers 5.20.2. Mỗi cấu hình 3 seed: 127–133 s (title), 247 s (title+sapo); oof 250 s; model cuối 53 s; tổng 13,5 phút |
 | LLM | `Qwen2.5-7B-Instruct` 4-bit và `1.5B`: zero-shot, few-shot k ∈ {0, 4, 8, 16} lấy từ phần VnExpress của ViClickbait, few-shot theo độ tương tự, CoT | title | không học | Giải mã tham lam; score = P("1") / (P("0") + P("1")) ở token nhãn; ngưỡng 0,5; CoT sinh tối đa 200 token; batch 8 | Kaggle, 1 GPU Tesla T4; torch 2.11 (cu130), transformers 5.20.2, bitsandbytes 0.50.2. 7B: nạp model 116 s, chiếm 5,9 GB GPU; mỗi chế độ không CoT 3,5–8 phút, CoT 28 phút, chấm corpus khoảng 10 phút. 1.5B: 0,8–3 phút mỗi chế độ |
 
 ## 4. Kết quả
@@ -174,20 +173,45 @@ Ghi chú: bản TF-IDF+LR chỉ học trên dev trong `extras` dùng ngưỡng 0
 - **1.5B gần như gán 1 cho mọi tiêu đề** (89–99%). Nó gần như không làm được việc này, chỉ CoT là đỡ hơn. **Bản 7B đáng chi phí hơn 1.5B rõ rệt.**
 - Corpus chấm bằng few-shot 7B (`corpus_scores_qwen.csv`): 26,2% tiêu đề bị gán dương, riêng phần ngoài dev là 15,6%. Trên 494 bài ngoài dev, Qwen trùng nhãn với model cuối 84,6%.
 
-### 4.5 Học sâu: PhoBERT (chưa chạy)
+### 4.5 Học sâu: PhoBERT (`vinai/phobert-base-v2`, Kaggle)
 
-Sau khi tải kết quả PhoBERT về `results/clickbait/kaggle/`, chạy `collect` rồi chép vào đây các mục sau:
-- PhoBERT tách từ / không tách từ / title+sapo (mean ± std qua 3 seed);
-- PhoBERT ViClickbait + dev (oof);
-- ensemble TF-IDF + PhoBERT.
+Điểm tính lại bằng lệnh `collect` trên nhãn cuối.
+- Cột "điểm trung bình" dùng xác suất trung bình qua 3 seed, ngưỡng 0,5.
+- Cột "mean ± std" là trung bình và độ lệch chuẩn khi chấm riêng từng seed.
+- Cột "ngưỡng hold-out": ngưỡng tối ưu F1 chọn trên 10% ViClickbait được giữ lại, không chọn trên dev.
+
+| Cấu hình | Huấn luyện | F1 [CI95] (điểm trung bình) | PR-AUC [CI95] | F1 mean ± std (3 seed) | PR-AUC mean ± std | F1 với ngưỡng hold-out | Tỷ lệ dự đoán dương |
+|---|---|---|---|---|---|---|---|
+| Tách từ (pyvi), title | ViClickbait | 0,500 [0,414–0,579] | 0,504 [0,397–0,611] | 0,507 ± 0,013 | 0,481 ± 0,016 | 0,486 (t=0,61) | 0,180 |
+| Không tách từ, title | ViClickbait | 0,483 [0,404–0,559] | **0,514** [0,400–0,617] | 0,484 ± 0,044 | 0,488 ± 0,009 | 0,487 (t=0,51) | 0,191 |
+| Không tách từ, title+sapo | ViClickbait | 0,464 [0,372–0,544] | 0,431 [0,333–0,545] | 0,463 ± 0,004 | 0,432 ± 0,012 | 0,457 (t=0,60) | 0,163 |
+| Không tách từ, title | ViClickbait + dev (oof, seed 42) | **0,569 [0,477–0,647]** | **0,527 [0,413–0,655]** | (1 seed) | | 0,558 (t=0,36) | 0,144 |
+
+**Ensemble** (trung bình xác suất, ngưỡng 0,5):
+
+| Ghép | F1 [CI95] | PR-AUC [CI95] | Tỷ lệ dự đoán dương |
+|---|---|---|---|
+| TF-IDF+LR (ViClickbait) + PhoBERT tách từ | 0,504 [0,416–0,577] | 0,458 [0,358–0,560] | 0,188 |
+| TF-IDF+LR (ViClickbait) + PhoBERT ViClickbait + dev (oof) | 0,530 [0,439–0,609] | 0,498 [0,392–0,610] | 0,173 |
+| **Model cuối (TF-IDF + đặc trưng viết tay, dev, oof) + PhoBERT ViClickbait + dev (oof)** (thử thêm sau khi có kết quả) | **0,614 [0,510–0,701]** | **0,651 [0,538–0,756]** | 0,085 |
+
+**Nhận xét:**
+- **PhoBERT là model mạnh nhất trong các model chỉ học trên ViClickbait.** PR-AUC khoảng 0,50, so với 0,31 của TF-IDF và 0,34 của Qwen 7B, dù không thấy nhãn VnExpress nào. PhoBERT nắm được ngữ nghĩa tiêu đề tốt hơn n-gram.
+- **Thêm dev vào huấn luyện giúp tăng F1** (0,48 → 0,57). PR-AUC chỉ tăng nhẹ (0,51 → 0,53).
+- **Tách từ bằng pyvi không đổi kết quả:** chênh lệch nằm trong độ lệch giữa các seed.
+- **Thêm sapo làm kém đi,** giống ở mức cổ điển (PR-AUC 0,51 → 0,43).
+- **Ngưỡng hold-out không giúp F1.** Ngưỡng 0,5 đã cho tỷ lệ dự đoán dương gần tỷ lệ thật.
+- **Ensemble của model cuối với PhoBERT oof là cấu hình tốt nhất** (F1 0,614, PR-AUC 0,651). Hai model sai ở chỗ khác nhau: model cổ điển dựa vào bề mặt tiêu đề, PhoBERT dựa vào ngữ nghĩa. Tuy vậy:
+  - khoảng tin cậy vẫn chồng với model cuối;
+  - cấu hình này được thử sau khi đã xem kết quả, không định trước, nên điểm có thể hơi lạc quan.
 
 ## 5. Model cuối
 
 **Model chọn:** TF-IDF (n-gram từ và ký tự) kết hợp 9 đặc trưng viết tay, Logistic Regression, học trên 750 tiêu đề dev.
 
 **Lý do:**
-- Model này tốt nhất ở cả F1 và PR-AUC trong mọi model đã chạy.
-- Khoảng tin cậy của nó không chồng lên các model học trên ViClickbait (PR-AUC 0,573 [0,460–0,677] so với tốt nhất 0,434).
+- PR-AUC cao nhất trong các model đơn lẻ: 0,573, so với 0,527 của PhoBERT. F1 ngang PhoBERT: 0,553 so với 0,569, chênh lệch nằm trong khoảng tin cậy.
+- Vượt rõ mọi model cổ điển học trên ViClickbait (PR-AUC tốt nhất của nhóm này là 0,434) và Qwen (0,344).
 - Model đơn giản, chạy trên CPU trong vài giây.
 - Thêm ViClickbait vào dữ liệu huấn luyện lại làm kém đi, vì định nghĩa clickbait của ViClickbait (31% dương, 8 báo) khác với định nghĩa của nhóm.
 
@@ -201,7 +225,17 @@ Sau khi tải kết quả PhoBERT về `results/clickbait/kaggle/`, chạy `coll
 - 750 bài trong dev giữ nhãn sửa tay; model đồng ý với 99,1% số này vì đã học trên chúng.
 - 494 bài ngoài dev: model gán 4,7% là clickbait. Phần này đã bị rút bớt mẫu dương khi chọn nhóm H, nên tỷ lệ thấp hơn mức 10% của phần dev ngẫu nhiên là hợp lý.
 
-Qwen đã chạy và kém hơn rõ (mục 4.4), nên không đổi model. **Nếu PhoBERT cho kết quả tốt hơn rõ** (khoảng tin cậy không chồng nhau), chạy `final --from-file results/clickbait/kaggle/corpus_scores_<config>.csv`. Nếu không, giữ model hiện tại vì nó đơn giản hơn.
+**So với các mức khác:**
+- **Qwen** kém hơn rõ (mục 4.4).
+- **PhoBERT tốt nhất** (ViClickbait + dev, oof): F1 0,569 [0,477–0,647], PR-AUC 0,527 [0,413–0,655]. Khoảng tin cậy chồng hẳn lên model cuối, F1 0,553 [0,453–0,632] và PR-AUC 0,573 [0,460–0,677].
+- **Ensemble** cao hơn (0,614 / 0,651) nhưng khoảng tin cậy vẫn chồng nhau, và cấu hình này được chọn sau khi xem kết quả.
+
+Theo TASK §4 (ưu tiên model đơn giản hơn nếu chênh lệch không đáng kể), mình **giữ model cổ điển**. Model này chạy vài giây trên CPU, không cần GPU, dễ chạy lại.
+
+**PhoBERT bản cuối** (không tách từ, học trên 90% ViClickbait + toàn bộ dev, seed 42):
+- Gán 8,2% corpus là clickbait (ngưỡng 0,5); riêng phần ngoài dev là 2,8%.
+- Trên 494 bài ngoài dev, nhãn trùng với model cuối 94,1%.
+- File kết quả nằm trong `results/clickbait/kaggle/corpus_scores_phobert.csv`. Muốn dùng thì chạy `final --from-file` với file này.
 
 ## 6. Phân tích lỗi
 
@@ -237,7 +271,20 @@ Phân tích này dựa trên model cuối, chấm out-of-fold trên dev.
   - Kiểu 1, coi tin bình thường là clickbait: 025 *Tom Cruise tái hiện điệu nhảy trong 'Risky Business'* (cho là "gợi tò mò"), 028 (cho "trang sức từng tặng" là đại từ mơ hồ), 023.
   - Kiểu 2, bỏ qua dấu hiệu thật: 016 *... bị Iran 'đánh tan hoang'*, 006 *Những lời đầu tiên của tử tù...*.
   - CoT có lúc tự mâu thuẫn. Ở 015, lời giải thích nói tiêu đề "dùng từ ngữ cảm xúc" nhưng vẫn kết luận nhãn 0. Ở 025, lời giải thích nói "không phải cường điệu" nhưng lại gán nhãn 1.
-- **PhoBERT:** chưa có kết quả. Chi phí GPU dự kiến khoảng 0,5 giờ.
+- **PhoBERT (học sâu):**
+  - Khi không có nhãn trong miền, đây là mức tốt nhất (PR-AUC khoảng 0,50, chỉ học trên ViClickbait). Có thêm dev thì ngang model cổ điển trong miền.
+  - Chi phí vừa phải: khoảng 2 phút GPU T4 cho mỗi cấu hình 3 seed, toàn bộ notebook 13,5 phút. Nhưng bắt buộc phải có GPU, và file model nặng 540 MB.
+  - Các lỗi khác với model cổ điển, nên ghép hai model cho điểm cao nhất (mục 4.5).
+- **Chi phí theo mức:**
+
+  | Mức | Thời gian chạy | Nhãn VnExpress cần |
+  |---|---|---|
+  | Luật từ khóa | 0 giây | 0 |
+  | Cổ điển | vài giây đến vài phút trên CPU | 750 nhãn dev cho bản tốt nhất |
+  | PhoBERT | khoảng 14 phút trên T4 | 0, hoặc 750 nhãn dev |
+  | Qwen 7B | khoảng 1 giờ trên T4 | 0 |
+
+  Model rẻ nhất mà đạt điểm cao nhất là model cổ điển học trên 750 nhãn dev.
 
 ## 7. Chạy lại
 
