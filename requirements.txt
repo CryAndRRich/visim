@@ -9,4 +9,5 @@ scipy==1.13.1
 scikit-learn==1.6.1
 networkx==3.2.1
 pytest==8.4.2
+pyvi==0.1.1  # Vietnamese word segmentation (clickbait extras, final --segment)
 # PhoBERT, ViSoBERT and Qwen run on Kaggle GPU (notebooks/); the notebooks install what they need.

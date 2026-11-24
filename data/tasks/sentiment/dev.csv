@@ -1,5 +1,5 @@
 ﻿id,text,parent_text,label
-001,"Mới vài năm phát triển mà đã thế này, thì chục năm nữa diễn viên AI có cảm xúc luôn rồi. Mong là sẽ không thay đổi quá nhanh, theo ko kịp",,neu
+001,"Mới vài năm phát triển mà đã thế này, thì chục năm nữa diễn viên AI có cảm xúc luôn rồi. Mong là sẽ không thay đổi quá nhanh, theo ko kịp",,neg
 002,"Có thua kém xa với những sản phẩm từ thiên nhiên hay không chẳng quan trọng, vấn đề là thị trường quyết định. Vì thị trường không nhất thiết chọn sản phẩm tốt nhất về một tiêu chí, mà chọn sản phẩm đáp ứng tốt nhất tổng hợp các nhu cầu mà người mua sẵn sàng trả tiền.",Dù sao thì vẫn thua kém xa với những sản phẩm từ thiên nhiên. Như do nhu cầu quá lớn nên sản phẩm qua xử lý công nghệ chỉ là nhanh và phù hợp với người mua.,neu
 003,"những con B hay A quả là phi thường , từ cú cắm đầu vượt âm , ngoài tính toán thiết kế mà nó vẫn an toàn chứng tỏ đi máy bay vẫn yên tâm",,pos
 004,"Vụ này là vi phạm bản quyền, vi phạm quyền sở hữu trí tuệ. Sao không xử lí ngay nhỉ?",,neg
@@ -145,7 +145,7 @@
 144,Đúng là diễn biến chỉ trong vài giây nhưng mỗi quyết định đều có thể ảnh hưởng đến tính mạng của hàng trăm người.,Tôi đọc mà xúc động vô cùng. Như phim hành động. Sự việc chỉ tính bằng giây nhưng họ đã chiến thắng.,pos
 145,"Ko có đâu bạn. Lưu thông nhanh hơn thì lại thêm xe lên cao tốc (trước họ chạy ở dưới, hoặc ngán tác quá, khỏi chạy)",Lượng xe lưu thông trên vành đai 3 hiện nay cũng vượt quá 8 đến 10 lần lưu lượng thiết kế. Cũng lượng xe như vậy được phân bố đều hơn trên mặt cầu và lưu thông nhanh hơn. Vậy giải pháp nào sẽ khả thi hơn?,neg
 146,Đồng tình với VKS! Mọi người tôn trọng trước pháp luật.,,pos
-147,"Cà phê Việt Nam ngày càng ngon, ngày càng chất lượng với đa dạng các món. Thế nhưng, nếu lại trồng ồ ạt thì giá lại rớt tanh bành.",,neu
+147,"Cà phê Việt Nam ngày càng ngon, ngày càng chất lượng với đa dạng các món. Thế nhưng, nếu lại trồng ồ ạt thì giá lại rớt tanh bành.",,neg
 148,Rất sang trọng và đẹp,,pos
 149,"Quá đã, giờ đi từ Long An qua Đồng Nai xuống Vũng Tàu tiện hẳn luôn",,pos
 150,"Giờ đi xe đạp nguy hiểm hơn đi xe máy. Nhất là khi băng qua đường, tôi luôn có cảm giác ko an toàn, ko chạy kịp, ko né được. Còn đi xe máy thì cảm thấy thoải mái hơn.",,neg
@@ -178,7 +178,7 @@
 177,Xử bắn có gì hay ho mà phát trực tiếp?,,neg
 178,"Chuyện bình thường thôi. Phim nào chả gây tò mò hoặc hết lúc sôi trào nhất. Kinh tế thị trường ai giỏi người đó thắng. Fan ra rạp xem phim thần tượng ido. Còn fan phim mạng thì đón phim mạng AI xem thôi. Họ chỉ lên kịch bản làm phim ai thích xem thì xem, không thích thì tìm cái khác, họ không quảng cáo tạo scand gây ồn ào gây phản ứng dư luận như phim rạp mỗi lần làm ra 1 sản phẩm. Tui cũng là fan phim 3d.",,neu
 179,sao không thuê xe tải chở thẳng đến các lò mổ gần nhất nhỉ? bị sét đánh chết chứ đâu phải bị bệnh nên mổ thịt được mà.,,neu
-180,@USER_5bbc57653dd8 : Vậy theo bạn giờ đổ cho ai?,"Đừng đổ thừa cho ông trời nữa, nếu cứ như thế thì không bao giờ nhìn nhận lại mình",neu
+180,@USER_5bbc57653dd8 : Vậy theo bạn giờ đổ cho ai?,"Đừng đổ thừa cho ông trời nữa, nếu cứ như thế thì không bao giờ nhìn nhận lại mình",neg
 181,Dù tham gia vào sự việc gì thì Elon Musk vẫn luôn gây tranh cãi nhỉ,,neu
 182,"@USER_44d210c60ae4 : Theo dõi những cuộc thăm dò, kể cả bài báo này thì biết.",@USER_58e8c4087ad8 : Sao bạn biết không?,neu
 183,@USER_b4ffc583a0e2 : Mình đi ở trọ còn mua 2 thùng xốp đặt ở sân ban công trồng rau được nữa là.,Nhà nào cũng có khu vực bố trí thùng xốp để trồng cây hay sao? Chưa kể phải có mái che khi mưa lớn.,neu
@@ -209,7 +209,7 @@
 208,"Đi ngủ để sáng mai đi những excursion giá trị cao, làng nghề, tìm hiểu văn hóa, tôn tạo cộng đồng. Đi ăn tối fine dining gì thì cũng 9g tối đã vãn, doanh thu/ khách cao và không phải ồn đến sáng. Theo nghiên cứu, khách có nhiều trải nghiệm văn hóa là những người sẽ chi trung bình hàng trăm USD, thậm chí hàng ngàn USD cho sản vật địa phương, quà tặng, đóng góp chung vào ngành du lịch và xuất khẩu tại chỗ. Cái mà kinh tế đêm không làm được, chỉ giải quyết việc làm cho rất ít người và doanh thu thuộc về 1 nhóm rất nhỏ chủ quán.","Hãy tưởng tượng : không có Bùi Viện, Tạ Hiện... những phố đêm nhộn nhịp thì Tây( khách nước ngoài) sang ta biết làm gì sau 11 h đêm?",neu
 209,Và cô gái dừng chân Á hậu 4 rồi.,,neu
 210,Thường thì một điều gì quá mức thì người thường nói không thể tưởng tượng. Vâng! Không thể tưởng tượng mà có.,"Là cán bộ công an, là giảng viên trường công an mà làm những chuyện tày trời. May là phá án kịp thời, nếu không hậu quả việc này không biết tới đâu",neg
-211,"Phim ảnh là phản ánh cuộc sống, càng gần gũi, bình dân thì người xem mới dễ thấy bóng dáng mình trong đó. Những câu chuyện đời thường, hỉ nộ ái ố xung quanh mình lúc nào cũng chạm tới cảm xúc nhanh nhất.",,pos
+211,"Phim ảnh là phản ánh cuộc sống, càng gần gũi, bình dân thì người xem mới dễ thấy bóng dáng mình trong đó. Những câu chuyện đời thường, hỉ nộ ái ố xung quanh mình lúc nào cũng chạm tới cảm xúc nhanh nhất.",,neu
 212,"Càng nhiều thắng cảnh thì Nghệ An càng có cơ hội phát triển kinh tế, chỉ mong quản lý tốt để người dân địa phương cùng hưởng lợi ️",,pos
 213,COVID đã qua. Ai cũng biết vaccine từ đâu.,Từ sau vụ đại dịch Covid thế giới đã rất thận trọng trong việc phòng chống.,neg
 214,"@USER_53676246d77b : Bạn nên so sánh thu nhập trung bình ở 2 nước. Tìm hiểu khái niệm nước thu nhập trung bình, nước thu nhập cao.",@USER_37fbd864b122 : thế chắc lúc trẻ ng ta ko làm già vẫn đc nhận hưu à b? hay chỉ là trợ cấp người già?,neu
@@ -265,7 +265,7 @@
 264,có bộ chuyển đổi là xe nào cũng sạc được mà !,,neu
 265,"Không có người điều khiển mà lúc chúi xuống đất khi phi công phóng ghế thoát hiểm, rồi sao đó máy bay lại ngóc đầu bay lên cao 12.000m ,sau đó lại bay bằng. Theo lẽ thì khi ngóc đầu bay lên cao mà không có người điều khiển thì máy bay phải bay cao,cao mãi đến hết sức chịu đựng của máy bay bởi lực hấp dẫn thì máy bay sẽ bị hư hại và rơi xuống, chứ sao lại bay bằng rồi chuyển hướng liên tục!? Lạ nhỉ???.","Nếu xảy ra trong Holywood thì sẽ có anh hùng trèo vào MIG -23 từ phi cơ hộ tống, đưa phi cơ hạ cánh an toàn.",neu
 266,@USER_d9f199a133e3 : Luật pháp quy định lòng đường được quyền đỗ xe .,@USER_ad7d8e0bd47b : Đúng là đường không phải của họ nhưng cũng đâu phải của bạn mà bạn được đỗ xe. Đường là của chung mà sao bạn lại chiếm để đỗ xe?,neu
-267,Giờ chả 10 làn,Quốc lộ 1 là con đường huyết mạch phải từ từ nâng cấp lên mỗi bên 5 hoạc 6 làn xe thì mới tương xứng,neu
+267,Giờ chả 10 làn,Quốc lộ 1 là con đường huyết mạch phải từ từ nâng cấp lên mỗi bên 5 hoạc 6 làn xe thì mới tương xứng,neg
 268,"thế này thì tiếng vọng điện ảnh của một thời mãi là quá khứ, ""ăn liền liền"" chỉ có tác dụng khi bụng đói thôi!",,neg
 269,@USER_9ea11a1c5c3e : Fb giờ bán sao lại tiktok shop,@USER_dde425c1a3f9 : Facebook thường thì gặp bán hàng lừa đảo nhiều hơn.,neu
 270,"Đáng tiếc là ảnh chợ Bến Thành xa xưa có rất nhiều, nhưng tôi chưa thấy có ảnh nào chụp cảnh sinh hoạt buôn bán bên trong chợ.",,neg
@@ -921,7 +921,7 @@ R119,Bạn nữ nào chưa ny khum,,neu
 R120,"Dior luôn vậy, nữ tính, gợi cảm quyến rũ vs sang trọng. Bộ áo đẹp quá",,pos
 R121,"@USER_2b8b14705546 : Oh, nếu đem chuyện giải phóng mặt bằng tới đây để nói thì bạn bị lạc đề rồi đấy.","@USER_26d1b9d94794 : Chắc chưa? Hàng xóm nhà tôi mới nhận đề bù GPMB hơn 10 tỷ, chia 6 anh chị em, giờ ở nhà thuê hết. Thấy 1 căn nhà chỉ là vẻ bên ngòai, bên trong ko biết thì miễn bàn.",neg
 R122,Những người đi tìm bố là do không có bố hay do không biết bố là ai mà mẹ không chịu nói.,"Bao nhiêu người đi tìm bố chưa đủ hay sao còn lập nhóm ghét bố mẹ, cần giáo dục sâu sắc hơn nữa.",neu
-R123,Bạn có bàn hàng trên sàn chưa ?,"Nếu ai cũng kéo khách đi để né phí sàn, vậy chẳng phải người bán đang biến Shopee, TikTok Shop thành nơi “kiếm khách miễn phí”, còn chi phí quảng cáo và vận hành thì để sàn gánh? Đến khi có khách rồi mới kéo họ đi, liệu có công bằng với sàn không?",neu
+R123,Bạn có bàn hàng trên sàn chưa ?,"Nếu ai cũng kéo khách đi để né phí sàn, vậy chẳng phải người bán đang biến Shopee, TikTok Shop thành nơi “kiếm khách miễn phí”, còn chi phí quảng cáo và vận hành thì để sàn gánh? Đến khi có khách rồi mới kéo họ đi, liệu có công bằng với sàn không?",neg
 R124,bạn nghĩ bạn đẹp đủ để gái xinh quan tâm đến à.,Quá xấu. Không nhẽ hết gái xinh rồi à?,neg
 R125,ko bố trí lúc gặp nạn thì cơ trưởng thoát ra khỏi buồng lái kiểu gì,"Chiếc rìu trên máy bay vốn để dùng khi có sự cố, vậy mà cuối cùng lại trở thành hung khí tấn công chính cơ trưởng. Không biết những dụng cụ kiểu này có cần được bố trí hoặc thiết kế lại để hạn chế nguy cơ bị người trong buồng lái sử dụng sai mục đích không?",neu
 R126,Rồi vừa ăn trưa vừa cầm bảng điện lướt à?,,neg
@@ -1010,7 +1010,7 @@ R208,@USER_cc9f8f44f9b0 : Bạn tính hay thật: lợi nhuận sau thuế trong
 R209,Bạn tính dùm cái :'),"Quả cầu 18 tấn rồi cũng phải tháo dỡ để mở đường, vậy lúc xây có tính đến quy hoạch lâu dài chưa?",neu
 R210,"Báo công an thì bây giờ lại là nạn nhân rồi,người cháu cũng không bị vướng vào vòng lao lý.",,neu
 R211,Vậy mà bạn nói là cố ý gây thương tích. Bạn có đọc họ mang theo hung khí gì không? Những thứ đó mà chỉ gây thương tích thôi sao? Bị hại không chết là do may mắn. Nếu bị vào đầu thì có lẽ bạn nói cẩu tặc vô ý gây hậu quả nghiêm trọng,còn tội cố ý gây thương tích đâu.,neg
-R212,"@USER_6eee9f21f606 : Việc này giống như bạn và hàng xóm đi chung một con đường,bạn phải bỏ ra cả tỉ đồng để xây đường hàng xóm thì cũng được đi nhưng mỗi lần chỉ đưa cho bạn mấy chục tiền lẻ,bạn có đồng ý không.",Có cho người khác dùng miễn phí đâu mà nói thế.,neu
+R212,"@USER_6eee9f21f606 : Việc này giống như bạn và hàng xóm đi chung một con đường,bạn phải bỏ ra cả tỉ đồng để xây đường hàng xóm thì cũng được đi nhưng mỗi lần chỉ đưa cho bạn mấy chục tiền lẻ,bạn có đồng ý không.",Có cho người khác dùng miễn phí đâu mà nói thế.,neg
 R213,Ba mẹ bạn mà cũng nghĩ như bạn thì đã ko có bạn rồi.,"Nghiên cứu trên thế giới là nhóm phụ nữ giống Khánh My có chỉ số cao hạnh phúc cao top 1 (vì có thêm tài chính vững & sự nghiệp) Mình và nhiều phụ nữ mình biết cũng chọn như vậy và thấy rất hạnh phúc với lựa chọn của mình. Như vậy có nhiều thời gian chăm sóc bản thân, những giấc ngủ ngon, trải nghiệm cuộc sống, công việc. May mắn bố mẹ mình rất cấp tiến & tôn trọng con cái, luôn ủng hộ mình đi chơi khám phá cũng như gặp gỡ giao lưu. Gặp bố mẹ như được chia sẻ với các bạn.",neg
 R214,Vậy bạn chưa biết nhiều lắm về hàn rồi =)) Ko cần tới hàn hay đi nước ngoài cũng có thể đọc và xem nhiều thứ lắm bạn. Ko có bất kì đất nước nào cái gì cũng giỏi hết.,sao Hàn quốc cái gì cũng giỏi vậy,neg
 R215,"Đã đc hoãn án tù 8 năm là may mắn rồi còn giết người làm chi , giờ thì fai đi tù luôn rồi con nhỏ làm sao đây ?",,neg

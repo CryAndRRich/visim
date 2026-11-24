@@ -17,6 +17,7 @@ Mỗi thành viên phụ trách một bài toán. Mục tiêu chung:
 - [ ] Code chạy được: `src/classifiers/<bai-toan>.py` cho các model chạy trên máy, `notebooks/<bai-toan>_<model>.ipynb` cho các model chạy trên Kaggle.
 - [ ] `data/tasks/<bai-toan>/corpus_labels.csv`: nhãn của model cuối cho toàn bộ `corpus.csv`.
 - [ ] `notes/<bai-toan>.md`: file ghi chép theo mục 7.
+- [ ] `data/tasks/<bai-toan>/agreement.csv`: 100 mẫu `dev` do một người gán độc lập (mục 8).
 
 **Thứ tự làm việc:**
 1. Chạy các model rẻ để có điểm ban đầu.
@@ -24,6 +25,7 @@ Mỗi thành viên phụ trách một bài toán. Mục tiêu chung:
 3. Chạy đủ các mức model và ablation trên nhãn đã ổn định (mục 5).
 4. Chọn model cuối và gán nhãn cho `corpus.csv`.
 5. Viết file ghi chép và mở pull request.
+6. Đo độ đồng thuận giữa nhãn `dev` và một người gán độc lập (mục 8), ghi vào file ghi chép.
 
 ## 1. Bắt đầu
 
@@ -107,7 +109,7 @@ Lặp các bước sau cho tới khi nhãn `dev` ổn định:
    - Không lấy lại mẫu đã kiểm tra ở lượt trước.
 3. **Kiểm tra bằng tay.**
    - Đọc nội dung trước, tự quyết nhãn theo định nghĩa ở mục 6, rồi mới so với cột `label`.
-   - Không dùng ChatGPT, Claude hay công cụ AI nào để quyết nhãn.
+   - **Thực tế đã làm (chốt 25/11/2026):** ở cả 3 bài toán, các lượt kiểm tra đều do LLM (Claude) quyết thay người, theo định nghĩa ở mục 6. Vì vậy nhãn `dev` là nhãn LLM đã được LLM rà lại, và mọi điểm số đo mức khớp với nhãn LLM. File ghi chép của từng bài phải nói rõ điều này. Chất lượng nhãn được đo bằng độ đồng thuận với một người gán độc lập (mục 8). Người gán ở mục 8 không được dùng công cụ AI.
    - Sai thì sửa thẳng cột `label` trong `dev.csv`. Không sửa, xóa hay đổi thứ tự cột và dòng khác. Lưu lại dạng CSV UTF-8.
 4. **Commit mỗi lượt một lần,** ví dụ: `dev: luot 2, kiem tra 40 mau, sua 6 nhan`.
 5. **Chạy lại model trên nhãn mới** và quay về bước 2.
@@ -122,8 +124,8 @@ Lặp các bước sau cho tới khi nhãn `dev` ổn định:
 **Bước cuối:**
 1. Chọn model cuối, ưu tiên model đơn giản hơn nếu chênh lệch không đáng kể.
 2. Huấn luyện lại model đó trên toàn bộ dữ liệu được phép dùng.
-3. Gán nhãn cho `corpus.csv`, lưu vào `data/tasks/<bai-toan>/corpus_labels.csv` với các cột `id`, `label`, `score`.
-4. Với các mẫu nằm trong `dev`, giữ nhãn đã sửa tay ở cột `label`. `score` vẫn là điểm của model.
+3. Gán nhãn cho `corpus.csv`, lưu vào `data/tasks/<bai-toan>/corpus_labels.csv` với đúng 3 cột `id`, `label`, `score`. `score` là xác suất lớp `1` (clickbait, thiếu văn minh) hoặc xác suất của nhãn được gán (cảm xúc), làm tròn 4 chữ số (`common.round_scores`).
+4. Với các mẫu nằm trong `dev`, giữ nhãn `dev` ở cột `label` (ghép bằng `common.dev_to_corpus_ids`). `score` vẫn là điểm của model.
 
 Mẫu code chọn mẫu kiểm tra cho bài toán hai lớp:
 
@@ -296,5 +298,17 @@ Khi xong, viết `notes/<bai-toan>.md` trên branch của mình, gồm các mụ
 5. **Model cuối:** chọn model nào, vì sao, điểm cuối cùng, tỷ lệ nhãn dự đoán trên `corpus.csv`.
 6. **Phân tích lỗi:** các kiểu model hay sai, kèm ví dụ (`id`), và điểm mạnh, điểm yếu của từng mức model (độ chính xác, chi phí, cần bao nhiêu dữ liệu có nhãn).
 7. **Chạy lại:** lệnh hoặc notebook cần chạy để ra lại đúng kết quả.
+8. **Độ đồng thuận với người:** kết quả của mục 8 (số mẫu, tỷ lệ khớp, Cohen's kappa, các `id` lệch và nhận xét).
+
+Không chép nội dung bình luận vào file ghi chép (repo công khai, bình luận là nội dung của người dùng): chỉ ghi `id`. Tiêu đề bài báo được trích cụm ngắn để minh họa lỗi. Mọi con số trong file ghi chép phải ra được bằng code trong repo (so sánh hai model dùng `common.paired_bootstrap`).
 
 Kết quả thô (bảng, dự đoán) để trong `results/<bai-toan>/`. Thư mục này không đưa lên git, nên các con số quan trọng phải được chép vào file ghi chép.
+
+## 8. Đo độ đồng thuận với người
+
+Nhãn `dev` do LLM gán và rà lại (mục 4), nên cần biết chúng lệch bao nhiêu so với người đọc thật.
+
+1. Người phụ trách bài toán chạy `python -m src.classifiers.agreement sample <bai-toan>`. Lệnh này ghi `data/tasks/<bai-toan>/agreement.csv`: 100 mẫu `dev` lấy ngẫu nhiên, phân tầng theo nhãn, seed 42, cột `label` để trống.
+2. Một thành viên **khác** gán cột `label` bằng tay, theo định nghĩa ở mục 6, không xem `dev.csv` và không dùng công cụ AI. Đề xuất: Dũng gán clickbait, Tấn gán cảm xúc, Kiên gán thiếu văn minh.
+3. Chạy `python -m src.classifiers.agreement score <bai-toan>` để tính tỷ lệ khớp và Cohen's kappa (ghi vào `results/<bai-toan>/agreement.json`). Commit `agreement.csv`, chép kết quả vào mục 8 của file ghi chép.
+4. Không sửa `dev.csv` theo kết quả này: các mẫu lệch chỉ được ghi lại và phân tích. Nếu kappa thấp (dưới khoảng 0,6), báo cả nhóm trước khi dùng nhãn cho báo cáo.
