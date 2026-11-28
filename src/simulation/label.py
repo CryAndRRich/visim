@@ -10,12 +10,14 @@
                  the agreement with the corpus labels on non-dev comments measures how close the retrained model
                  is to the original one.
 
-Output, next to each run's threads.jsonl: <task>_scores.csv (article_id, condition, id, label, score...). The real
-comments' sentiment scores of the retrained model go to data/simulation/generated/real_sentiment_scores.csv.
+Output, next to each run's threads.jsonl: <task>_scores.csv (article_id, condition, id, label, score...). The model
+scores of every real comment go to data/simulation/generated/real_<task>_scores.csv (model labels, without the
+dev overrides of corpus_labels.csv, so real and simulated comments are labelled the same way).
 
     python -m src.simulation.label incivility                         # local
     python -m src.simulation.label sentiment                          # GPU server
     python -m src.simulation.label sentiment --runs data/simulation/generated/main data/simulation/generated/rewrite
+    python -m src.simulation.label titles      # clickbait probability of original vs rewritten headlines
 """
 from __future__ import annotations
 
@@ -31,6 +33,7 @@ import numpy as np
 import pandas as pd
 
 from ..classifiers.common import CSV_ENCODING, dev_to_corpus_ids, load_corpus, load_dev, run_info
+from ..processing.snapshot import PROCESSED_DIR
 from .prompts import SIM_DIR
 
 GENERATED = SIM_DIR / "generated"
@@ -40,6 +43,7 @@ SENTIMENT_MODEL = "5CD-AI/Vietnamese-Sentiment-visobert"
 SEEDS = [42, 43, 44]
 EPOCHS, LR, BATCH, MAX_LEN = 4, 2e-5, 16, 256
 INCIVILITY_CONFIG = "tfidf_lr_dev_comment_tf1"
+FINAL_CLICKBAIT = "hand_tfidf_lr"
 MENTION = re.compile(r"@USER_[0-9a-f]+\s*:?", re.IGNORECASE)
 
 
@@ -70,9 +74,11 @@ def incivility(runs: list[str]) -> dict:
     fitted = inc.fit_tfidf(train, dev, "dev", False)
     threshold = fitted[2]["threshold_f1"]
     corpus = load_corpus("incivility")
+    real_score = inc.tfidf_scores(fitted, corpus, False)
+    real = corpus[["id"]].assign(label=(real_score >= threshold).astype(int), score=np.round(real_score, 4))
+    real.to_csv(GENERATED / "real_incivility_scores.csv", index=False, encoding=CSV_ENCODING)
     report = {"config": INCIVILITY_CONFIG, **fitted[2],
-              "reproduction": non_dev_agreement(
-                  "incivility", corpus["id"], (inc.tfidf_scores(fitted, corpus, False) >= threshold).astype(int))}
+              "reproduction": non_dev_agreement("incivility", real["id"], real["label"].to_numpy())}
     for run in runs:
         sim = simulated(run)
         score = inc.tfidf_scores(fitted, sim.assign(parent_text=""), False)
@@ -174,11 +180,41 @@ def sentiment(runs: list[str]) -> dict:
     return report
 
 
+def titles(path: Path) -> dict:
+    """Clickbait probability of the original and the rewritten headlines under the final clickbait model
+    (refitted on dev headlines, as for corpus_labels.csv). Writes <path stem>_check.csv next to the file."""
+    from ..classifiers import clickbait as cb
+
+    dev, yd = cb.load_dev_y()
+    xd = cb.text_of(dev, False)
+    tuned = cb.tune_in_domain(FINAL_CLICKBAIT, xd, yd, None, None)
+    model = cb.fit_in_domain(FINAL_CLICKBAIT, xd, yd, None, None, tuned["C"])
+    new = pd.read_csv(path, dtype={"article_id": str}, encoding=CSV_ENCODING)
+    arts = pd.read_parquet(PROCESSED_DIR / "articles.parquet", columns=["article_id", "title"])
+    arts["article_id"] = arts["article_id"].astype(str)
+    d = new.merge(arts.rename(columns={"title": "original"}), on="article_id", how="left")
+    if d["original"].isna().any():
+        raise ValueError(f"unknown article ids in {path}")
+    for col, name in (("original", "score_original"), ("title", "score_rewritten")):   # input: the headline only
+        d[name] = np.round(model.predict_proba(d[col].fillna("").astype(str))[:, 1], 4)
+    d["lower"] = d["score_rewritten"] < d["score_original"]
+    d["below_threshold"] = d["score_rewritten"] < tuned["threshold"]
+    d.to_csv(path.with_name(path.stem + "_check.csv"), index=False, encoding=CSV_ENCODING)
+    return {"model": FINAL_CLICKBAIT, "threshold": round(tuned["threshold"], 4), "titles": len(d),
+            "lower_than_original": int(d["lower"].sum()), "below_threshold": int(d["below_threshold"].sum()),
+            "mean_original": round(float(d["score_original"].mean()), 4),
+            "mean_rewritten": round(float(d["score_rewritten"].mean()), 4)}
+
+
 def main(argv=None) -> int:
     p = argparse.ArgumentParser(description="Label simulated comments with the final classifiers")
-    p.add_argument("task", choices=["incivility", "sentiment"])
+    p.add_argument("task", choices=["incivility", "sentiment", "titles"])
+    p.add_argument("--titles", default=str(SIM_DIR / "rewritten_titles.csv"), help="for `titles`")
     p.add_argument("--runs", nargs="+", default=DEFAULT_RUNS, help="run folders holding threads.jsonl")
     a = p.parse_args(argv)
+    if a.task == "titles":
+        print(json.dumps(titles(Path(a.titles)), indent=2, ensure_ascii=False))
+        return 0
     report = {**run_info(), **(incivility(a.runs) if a.task == "incivility" else sentiment(a.runs))}
     (GENERATED / f"{a.task}_labels.json").write_text(json.dumps(report, indent=2, ensure_ascii=False), encoding="utf-8")
     print(json.dumps(report, indent=2, ensure_ascii=False))

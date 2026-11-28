@@ -55,6 +55,10 @@ python -m src.simulation.generate download                 # tải model vào ca
 python -m src.simulation.generate run --out data/simulation/generated/main   # 100 bài x A, B, C
 python -m src.simulation.label sentiment     # huấn luyện lại ViSoBERT cuối, chấm bình luận thật và mô phỏng
 python -m src.simulation.label incivility    # chạy được trên CPU
+python -m src.simulation.gpu_eval           # cần GPU: độ tương đồng ngữ nghĩa, PhoBERT phân biệt thật/mô phỏng
+python -m src.simulation.evaluate           # so luồng thật và mô phỏng -> results/simulation_eval/
+python -m src.simulation.transfer           # model dự đoán tranh cãi áp lên luồng mô phỏng
+python -m src.simulation.label titles       # xác suất clickbait của tiêu đề gốc và tiêu đề viết lại
 ```
 
 Kết quả ghi vào `results/` (không đưa lên git). Khóa băm nằm trong `secrets/` và không bao giờ được đưa lên git.
