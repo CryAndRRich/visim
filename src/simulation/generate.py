@@ -2,8 +2,8 @@
 
 One thread per article and condition, with as many comments as the real thread. Comments are written in
 chunks of at most CHUNK; each later chunk sees the comments written so far. Every chunk is checked with
-`prompts.validate`; the comments before the first bad one are kept and the next round continues after them
-(with another seed). A thread with RETRIES attempts in a row that keep nothing is recorded as failed. All unfinished threads advance together, one chunk per round, so the GPU works
+`prompts.validate`; flagged comments (and the replies to them) are dropped, the rest is kept and renumbered,
+and the next round writes the missing ones (with another seed). A thread with RETRIES attempts in a row that keep nothing is recorded as failed. All unfinished threads advance together, one chunk per round, so the GPU works
 on a full batch. Finished threads are appended to <out>/threads.jsonl at once: a run that stops resumes
 where it was (threads already in the file are skipped).
 
@@ -30,6 +30,7 @@ import re
 import socket
 import sys
 import time
+from collections import Counter
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Callable
@@ -38,8 +39,8 @@ import pandas as pd
 
 from ..classifiers.common import CSV_ENCODING, SEED, run_info
 from ..processing.snapshot import PROCESSED_DIR
-from .prompts import (CHUNK, CONDITIONS, SCHEMA, SIM_DIR, article_inputs, messages, near_duplicate, text_key,
-                      validate)
+from .prompts import (CHUNK, CONDITIONS, SCHEMA, SIM_DIR, article_inputs, messages, near_duplicate, strip_ids,
+                      text_key, validate)
 
 MODEL = "Qwen/Qwen2.5-7B-Instruct"
 TEMPERATURE = 0.8
@@ -60,6 +61,7 @@ class Thread:
     title: str | None = None
     comments: list = field(default_factory=list)
     retries: int = 0
+    ids_stripped: int = 0
     attempt: int = 0            # attempts at the current chunk
     failed: list | None = None
 
@@ -73,7 +75,8 @@ class Thread:
 
     def record(self) -> dict:
         return {"article_id": self.article["article_id"], "condition": self.condition, "title": self.title,
-                "n": self.article["n"], "comments": self.comments, "retries": self.retries, "failed": self.failed}
+                "n": self.article["n"], "comments": self.comments, "retries": self.retries,
+                "ids_stripped": self.ids_stripped, "failed": self.failed}
 
 
 def chunk_seed(thread: Thread, start: int) -> int:
@@ -87,20 +90,30 @@ def chunk_schema(start: int, count: int) -> dict:
     return {**SCHEMA, "properties": {"comments": {**items, "minItems": count, "maxItems": count}}}
 
 
-def valid_prefix(comments: list, problems: list[str], count: int) -> int:
-    """Number of leading comments to keep: those before the first comment with a problem. A chunk with a
-    repeated or broken comment keeps its good start and the next round continues from there, so long threads
-    advance instead of losing whole chunks."""
+def keep_valid(comments: list, problems: list[str], start: int, count: int) -> list[dict]:
+    """The comments of a chunk without the flagged ones and the replies to them, renumbered from `start` with
+    their parents remapped. One repeated comment then costs one comment, not the rest of the chunk, and the
+    next round writes the missing ones."""
     if "invalid json" in problems:
-        return 0
-    flagged = [int(m.group(1)) for m in map(PROBLEM_AT.match, problems) if m]
-    return min([len(comments), count, *flagged])
+        return []
+    bad = {int(m.group(1)) for m in map(PROBLEM_AT.match, problems) if m}
+    kept, new_id, dropped = [], {}, set()
+    for i, c in enumerate(comments[:count]):
+        if i in bad or not isinstance(c, dict) or c.get("parent") in dropped:
+            if isinstance(c, dict):
+                dropped.add(c.get("id"))
+            continue
+        nid = f"c{start + len(kept)}"
+        new_id[c["id"]] = nid
+        kept.append({"id": nid, "parent": new_id.get(c["parent"], c["parent"]), "text": c["text"]})
+    return kept
 
 
 def run_rounds(threads: list[Thread], complete: Complete, on_finish: Callable[[Thread], None] = lambda t: None,
-               log: Callable[[str], None] = print) -> None:
+               log: Callable[[str], None] = print, reasons: Counter | None = None) -> None:
     """Advance every unfinished thread by one chunk per round until all are finished."""
     round_no = 0
+    reasons = Counter() if reasons is None else reasons
     while True:
         active = [t for t in threads if not t.finished]
         if not active:
@@ -119,13 +132,17 @@ def run_rounds(threads: list[Thread], complete: Complete, on_finish: Callable[[T
         for (t, start, count, _, _), raw in zip(jobs, raws):
             comments, problems = validate(raw, count, start, {c["id"] for c in t.comments},
                                           [c["text"] for c in t.comments])
-            keep = valid_prefix(comments, problems, count)
-            t.comments += [{"id": c["id"], "parent": c["parent"], "text": str(c["text"]).strip()}
-                           for c in comments[:keep]]
+            kept = keep_valid(comments, problems, start, count)
+            for c in kept:
+                text, stripped = strip_ids(str(c["text"]))
+                t.ids_stripped += stripped
+                t.comments.append({"id": c["id"], "parent": c["parent"], "text": text})
+            for problem in problems:
+                reasons[PROBLEM_AT.sub("", problem).strip()] += 1
             if problems:
                 bad += 1
                 t.retries += 1
-            if keep:
+            if kept:
                 t.attempt = 0
             elif problems:
                 t.attempt += 1
@@ -134,8 +151,8 @@ def run_rounds(threads: list[Thread], complete: Complete, on_finish: Callable[[T
             if t.finished:
                 on_finish(t)
         done = sum(t.finished for t in threads)
-        log(f"round {round_no}: {len(jobs)} chunks, {bad} rejected, {time.time() - began:.0f} s; "
-            f"{done}/{len(threads)} threads finished")
+        log(f"round {round_no}: {len(jobs)} chunks, {bad} cut or rejected, {time.time() - began:.0f} s; "
+            f"{done}/{len(threads)} threads finished; problems so far {dict(reasons.most_common(4))}")
 
 
 def prefer_ipv4() -> None:
@@ -231,13 +248,16 @@ def run(args) -> int:
         def save(t: Thread) -> None:
             f.write(json.dumps(t.record(), ensure_ascii=False) + "\n")
             f.flush()
-        run_rounds(todo, complete, on_finish=save, log=lambda m: print(m, flush=True))
+        reasons = Counter()
+        run_rounds(todo, complete, on_finish=save, log=lambda m: print(m, flush=True), reasons=reasons)
 
     with open(path, encoding="utf-8") as f:
         records = [json.loads(line) for line in f]
     settings.update({"finished_at": time.strftime("%Y-%m-%d %H:%M:%S"), "minutes": round((time.time() - began) / 60, 1),
                      "failed": sum(r["failed"] is not None for r in records),
-                     "retries": sum(r["retries"] for r in records), "records": len(records)})
+                     "retries": sum(r["retries"] for r in records), "records": len(records),
+                     "ids_stripped": sum(r.get("ids_stripped", 0) for r in records),
+                     "problems_this_run": dict(reasons.most_common())})
     (out / "run.json").write_text(json.dumps(settings, indent=2, ensure_ascii=False), encoding="utf-8")
     print(json.dumps({k: settings[k] for k in ("records", "failed", "retries", "minutes")}), flush=True)
     return 0
