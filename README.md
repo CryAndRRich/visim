@@ -53,6 +53,8 @@ Sinh luồng mô phỏng (cần GPU, vLLM và Qwen2.5-7B-Instruct, chạy trên 
 ```bash
 python -m src.simulation.generate download                 # tải model vào cache Hugging Face
 python -m src.simulation.generate run --out data/simulation/generated/main   # 100 bài x A, B, C
+python -m src.simulation.label sentiment     # huấn luyện lại ViSoBERT cuối, chấm bình luận thật và mô phỏng
+python -m src.simulation.label incivility    # chạy được trên CPU
 ```
 
 Kết quả ghi vào `results/` (không đưa lên git). Khóa băm nằm trong `secrets/` và không bao giờ được đưa lên git.
