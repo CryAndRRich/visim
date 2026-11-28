@@ -23,6 +23,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import os
 import socket
 import sys
 import time
@@ -129,6 +130,9 @@ def prefer_ipv4() -> None:
 
 
 def vllm_complete(model: str, gpu_memory: float, max_model_len: int, use_schema: bool) -> tuple[Complete, dict]:
+    # FlashInfer's top-k/top-p sampler compiles its kernel at start-up and needs nvcc (a CUDA toolkit), which a
+    # server with only the driver lacks; PyTorch's sampler needs nothing and costs little for a 7B model
+    os.environ.setdefault("VLLM_USE_FLASHINFER_SAMPLER", "0")
     import vllm
     from vllm import LLM, SamplingParams
 
