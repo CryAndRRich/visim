@@ -38,13 +38,15 @@ SCHEMA = {
 }
 SYSTEM = (
     "Bạn mô phỏng độc giả báo VnExpress viết bình luận dưới một bài báo. Viết bằng tiếng Việt, giống bình luận "
-    "thật trên báo điện tử: độ dài, giọng điệu và quan điểm khác nhau giữa các độc giả; có người đồng tình, có "
-    "người phản đối, có người hỏi thêm; một số bình luận trả lời bình luận trước đó. Độ dài rất khác nhau: có "
-    "bình luận chỉ vài từ, có bình luận vài câu, đôi khi một đoạn dài. Văn phong tự nhiên như người đọc thật, "
-    "không trang trọng, không tóm tắt lại bài báo, không lặp lại ý hay câu chữ của bình luận đã có. Không nêu "
-    "tên thật, số điện thoại hay email. Chỉ trả về JSON đúng schema, không viết gì thêm."
+    "thật trên báo điện tử: giọng điệu và quan điểm khác nhau giữa các độc giả; có người đồng tình, có người phản "
+    "đối, có người hỏi thêm; một số bình luận trả lời bình luận trước đó. Độ dài khác nhau: phần lớn một đến ba "
+    "câu, một số chỉ vài từ, thỉnh thoảng có bình luận dài nhiều câu phân tích kỹ hoặc kể trải nghiệm riêng. Văn "
+    "phong tự nhiên như người đọc thật, không trang trọng, không tóm tắt lại bài báo, không lặp lại ý hay câu chữ "
+    "của bình luận đã có. Không nhắc id (c1, c2...) trong nội dung. Không nêu tên thật, số điện thoại hay email. "
+    "Chỉ trả về JSON đúng schema, không viết gì thêm."
 )
 CJK = re.compile(r"[぀-ヿ㐀-鿿가-힯]")
+ID_IN_TEXT = re.compile(r"\bc\d{1,3}\b")   # lower case only: "cúp C1" is a football cup
 WORD = re.compile(r"\w+")
 NEAR_DUPLICATE = 0.8   # word-set Jaccard at or above which two comments count as the same
 
@@ -107,7 +109,8 @@ def messages(art: dict, condition: str, **kw) -> list[dict]:
 def validate(raw: str, n: int, start: int = 1, known: set | None = None,
              earlier_texts: list | None = None) -> tuple[list[dict], list[str]]:
     """Parse one chunk; returns (comments, problems). Problems: bad JSON, wrong count or ids, parent not an
-    earlier id, empty text, CJK characters (the model drifting out of Vietnamese), a comment that repeats
+    earlier id, empty text, CJK characters (the model drifting out of Vietnamese), a comment id in the text,
+    a comment that repeats
     (exactly or nearly) an earlier comment or another comment of the chunk."""
     problems = []
     m = re.search(r"\{.*\}", raw, re.S)
@@ -131,6 +134,8 @@ def validate(raw: str, n: int, start: int = 1, known: set | None = None,
             problems.append(f"comment {i}: parent {c.get('parent')} is not an earlier comment")
         if CJK.search(str(c.get("text", ""))):
             problems.append(f"comment {i}: non-Vietnamese characters")
+        if ID_IN_TEXT.search(str(c.get("text", ""))):
+            problems.append(f"comment {i}: mentions a comment id")
         key = text_key(c.get("text", ""))
         if any(near_duplicate(key, k) for k in keys):
             problems.append(f"comment {i}: repeats an earlier comment")

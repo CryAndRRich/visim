@@ -2,8 +2,8 @@
 
 One thread per article and condition, with as many comments as the real thread. Comments are written in
 chunks of at most CHUNK; each later chunk sees the comments written so far. Every chunk is checked with
-`prompts.validate`; a failed chunk is sampled again with another seed, up to RETRIES times, after which the
-thread is recorded as failed. All unfinished threads advance together, one chunk per round, so the GPU works
+`prompts.validate`; the comments before the first bad one are kept and the next round continues after them
+(with another seed). A thread with RETRIES attempts in a row that keep nothing is recorded as failed. All unfinished threads advance together, one chunk per round, so the GPU works
 on a full batch. Finished threads are appended to <out>/threads.jsonl at once: a run that stops resumes
 where it was (threads already in the file are skipped).
 
@@ -26,6 +26,7 @@ import argparse
 import hashlib
 import json
 import os
+import re
 import socket
 import sys
 import time
@@ -46,7 +47,8 @@ TOP_P = 0.95
 MAX_TOKENS = 6144          # one chunk: 25 comments
 MAX_MODEL_LEN = 32768      # the longest thread (199 comments) sends about 150 earlier comments in its last chunk
 GPU_MEMORY = 0.6           # share of the GPU vLLM may take (the server is shared)
-RETRIES = 3
+RETRIES = 5               # attempts in a row without any accepted comment before a thread is given up
+PROBLEM_AT = re.compile(r"comment (\d+):")
 
 Complete = Callable[[list, list, list], list]   # (conversations, seeds, schemas) -> raw texts
 
@@ -85,6 +87,16 @@ def chunk_schema(start: int, count: int) -> dict:
     return {**SCHEMA, "properties": {"comments": {**items, "minItems": count, "maxItems": count}}}
 
 
+def valid_prefix(comments: list, problems: list[str], count: int) -> int:
+    """Number of leading comments to keep: those before the first comment with a problem. A chunk with a
+    repeated or broken comment keeps its good start and the next round continues from there, so long threads
+    advance instead of losing whole chunks."""
+    if "invalid json" in problems:
+        return 0
+    flagged = [int(m.group(1)) for m in map(PROBLEM_AT.match, problems) if m]
+    return min([len(comments), count, *flagged])
+
+
 def run_rounds(threads: list[Thread], complete: Complete, on_finish: Callable[[Thread], None] = lambda t: None,
                log: Callable[[str], None] = print) -> None:
     """Advance every unfinished thread by one chunk per round until all are finished."""
@@ -107,16 +119,18 @@ def run_rounds(threads: list[Thread], complete: Complete, on_finish: Callable[[T
         for (t, start, count, _, _), raw in zip(jobs, raws):
             comments, problems = validate(raw, count, start, {c["id"] for c in t.comments},
                                           [c["text"] for c in t.comments])
+            keep = valid_prefix(comments, problems, count)
+            t.comments += [{"id": c["id"], "parent": c["parent"], "text": str(c["text"]).strip()}
+                           for c in comments[:keep]]
             if problems:
                 bad += 1
                 t.retries += 1
+            if keep:
+                t.attempt = 0
+            elif problems:
                 t.attempt += 1
                 if t.attempt > RETRIES:
                     t.failed = problems[:5]
-            else:
-                t.comments += [{"id": c["id"], "parent": c["parent"], "text": str(c["text"]).strip()}
-                               for c in comments]
-                t.attempt = 0
             if t.finished:
                 on_finish(t)
         done = sum(t.finished for t in threads)
