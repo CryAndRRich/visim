@@ -39,10 +39,27 @@ SCHEMA = {
 SYSTEM = (
     "Bạn mô phỏng độc giả báo VnExpress viết bình luận dưới một bài báo. Viết bằng tiếng Việt, giống bình luận "
     "thật trên báo điện tử: độ dài, giọng điệu và quan điểm khác nhau giữa các độc giả; có người đồng tình, có "
-    "người phản đối, có người hỏi thêm; một số bình luận trả lời bình luận trước đó. Không nêu tên thật, số điện "
-    "thoại hay email. Chỉ trả về JSON đúng schema, không viết gì thêm."
+    "người phản đối, có người hỏi thêm; một số bình luận trả lời bình luận trước đó. Độ dài rất khác nhau: có "
+    "bình luận chỉ vài từ, có bình luận vài câu, đôi khi một đoạn dài. Văn phong tự nhiên như người đọc thật, "
+    "không trang trọng, không tóm tắt lại bài báo, không lặp lại ý hay câu chữ của bình luận đã có. Không nêu "
+    "tên thật, số điện thoại hay email. Chỉ trả về JSON đúng schema, không viết gì thêm."
 )
 CJK = re.compile(r"[぀-ヿ㐀-鿿가-힯]")
+WORD = re.compile(r"\w+")
+NEAR_DUPLICATE = 0.8   # word-set Jaccard at or above which two comments count as the same
+
+
+def text_key(text: str) -> tuple:
+    return tuple(WORD.findall(str(text).lower()))
+
+
+def near_duplicate(a: tuple, b: tuple) -> bool:
+    if a == b:
+        return True
+    if min(len(a), len(b)) < 6:
+        return False
+    sa, sb = set(a), set(b)
+    return len(sa & sb) / len(sa | sb) >= NEAR_DUPLICATE
 
 
 def article_inputs() -> list[dict]:
@@ -87,9 +104,11 @@ def messages(art: dict, condition: str, **kw) -> list[dict]:
     return [{"role": "system", "content": SYSTEM}, {"role": "user", "content": user_prompt(art, condition, **kw)}]
 
 
-def validate(raw: str, n: int, start: int = 1, known: set | None = None) -> tuple[list[dict], list[str]]:
+def validate(raw: str, n: int, start: int = 1, known: set | None = None,
+             earlier_texts: list | None = None) -> tuple[list[dict], list[str]]:
     """Parse one chunk; returns (comments, problems). Problems: bad JSON, wrong count or ids, parent not an
-    earlier id, empty text, CJK characters (the model drifting out of Vietnamese)."""
+    earlier id, empty text, CJK characters (the model drifting out of Vietnamese), a comment that repeats
+    (exactly or nearly) an earlier comment or another comment of the chunk."""
     problems = []
     m = re.search(r"\{.*\}", raw, re.S)
     try:
@@ -101,6 +120,7 @@ def validate(raw: str, n: int, start: int = 1, known: set | None = None) -> tupl
     if len(comments) != n:
         problems.append(f"{len(comments)} comments instead of {n}")
     seen = set(known or ())
+    keys = [text_key(t) for t in earlier_texts or ()]
     for i, c in enumerate(comments):
         if not isinstance(c, dict) or not str(c.get("text", "")).strip():
             problems.append(f"comment {i}: empty or malformed")
@@ -111,6 +131,10 @@ def validate(raw: str, n: int, start: int = 1, known: set | None = None) -> tupl
             problems.append(f"comment {i}: parent {c.get('parent')} is not an earlier comment")
         if CJK.search(str(c.get("text", ""))):
             problems.append(f"comment {i}: non-Vietnamese characters")
+        key = text_key(c.get("text", ""))
+        if any(near_duplicate(key, k) for k in keys):
+            problems.append(f"comment {i}: repeats an earlier comment")
+        keys.append(key)
         seen.add(c.get("id"))
     return comments, problems
 

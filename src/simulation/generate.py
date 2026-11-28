@@ -14,6 +14,8 @@ where it was (threads already in the file are skipped).
     python -m src.simulation.generate run --out data/simulation/generated/rewrite --conditions A C \\
         --titles data/simulation/rewritten_titles.csv                # headline rewrite: article_id,title
     python -m src.simulation.generate run --out /tmp/x --dry-run     # threads, chunks, prompt sizes; no model
+    python -m src.simulation.generate summary --out data/simulation/generated/pilot [--show ID]
+                                     # statistics by condition next to the real threads; no model
 
 Output lines: article_id, condition, title (the rewritten headline, or null), n, comments [{id, parent, text}],
 retries, failed (the problems of the last attempt, or null). <out>/run.json holds the settings.
@@ -34,7 +36,9 @@ from typing import Callable
 import pandas as pd
 
 from ..classifiers.common import CSV_ENCODING, SEED, run_info
-from .prompts import CHUNK, CONDITIONS, SCHEMA, article_inputs, messages, validate
+from ..processing.snapshot import PROCESSED_DIR
+from .prompts import (CHUNK, CONDITIONS, SCHEMA, SIM_DIR, article_inputs, messages, near_duplicate, text_key,
+                      validate)
 
 MODEL = "Qwen/Qwen2.5-7B-Instruct"
 TEMPERATURE = 0.8
@@ -101,7 +105,8 @@ def run_rounds(threads: list[Thread], complete: Complete, on_finish: Callable[[T
         raws = complete([j[3] for j in jobs], [j[4] for j in jobs], [chunk_schema(j[1], j[2]) for j in jobs])
         bad = 0
         for (t, start, count, _, _), raw in zip(jobs, raws):
-            comments, problems = validate(raw, count, start, {c["id"] for c in t.comments})
+            comments, problems = validate(raw, count, start, {c["id"] for c in t.comments},
+                                          [c["text"] for c in t.comments])
             if problems:
                 bad += 1
                 t.retries += 1
@@ -129,7 +134,8 @@ def prefer_ipv4() -> None:
     socket.getaddrinfo = ordered
 
 
-def vllm_complete(model: str, gpu_memory: float, max_model_len: int, use_schema: bool) -> tuple[Complete, dict]:
+def vllm_complete(model: str, gpu_memory: float, max_model_len: int, use_schema: bool,
+                  repetition_penalty: float = 1.0) -> tuple[Complete, dict]:
     # FlashInfer's top-k/top-p sampler compiles its kernel at start-up and needs nvcc (a CUDA toolkit), which a
     # server with only the driver lacks; PyTorch's sampler needs nothing and costs little for a 7B model
     os.environ.setdefault("VLLM_USE_FLASHINFER_SAMPLER", "0")
@@ -152,6 +158,7 @@ def vllm_complete(model: str, gpu_memory: float, max_model_len: int, use_schema:
 
     def complete(conversations, seeds, schemas):
         params = [SamplingParams(temperature=TEMPERATURE, top_p=TOP_P, max_tokens=MAX_TOKENS, seed=s,
+                                 repetition_penalty=repetition_penalty,
                                  **(constrain(sc) if use_schema else {}))
                   for s, sc in zip(seeds, schemas)]
         outputs = llm.chat(conversations, params, use_tqdm=False)
@@ -198,10 +205,11 @@ def run(args) -> int:
         return 0
     prefer_ipv4()
     began = time.time()
-    complete, versions = vllm_complete(args.model, args.gpu_memory, args.max_model_len, not args.no_schema)
+    complete, versions = vllm_complete(args.model, args.gpu_memory, args.max_model_len, not args.no_schema,
+                                      args.repetition_penalty)
     out.mkdir(parents=True, exist_ok=True)
     settings = {**run_info(), **versions, "model": args.model, "temperature": TEMPERATURE, "top_p": TOP_P,
-                "max_tokens": MAX_TOKENS, "chunk": CHUNK, "retries": RETRIES, "schema": not args.no_schema,
+                "max_tokens": MAX_TOKENS, "repetition_penalty": args.repetition_penalty, "chunk": CHUNK, "retries": RETRIES, "schema": not args.no_schema,
                 "conditions": args.conditions, "titles": args.titles, "threads": len(threads)}
     (out / "run.json").write_text(json.dumps(settings, indent=2, ensure_ascii=False), encoding="utf-8")
 
@@ -218,6 +226,60 @@ def run(args) -> int:
                      "retries": sum(r["retries"] for r in records), "records": len(records)})
     (out / "run.json").write_text(json.dumps(settings, indent=2, ensure_ascii=False), encoding="utf-8")
     print(json.dumps({k: settings[k] for k in ("records", "failed", "retries", "minutes")}), flush=True)
+    return 0
+
+
+def max_depth(comments: list[dict]) -> int:
+    """Depth of the deepest comment; top-level comments have depth 1."""
+    parent, best = {c["id"]: c["parent"] for c in comments}, 0
+    for c in comments:
+        d, p = 1, c["parent"]
+        while p:
+            d, p = d + 1, parent.get(p)
+        best = max(best, d)
+    return best
+
+
+def thread_stats(texts: list[str], parents: list, depth: int) -> dict:
+    words = [len(str(x).split()) for x in texts]
+    keys = [text_key(x) for x in texts]
+    repeats = sum(any(near_duplicate(k, e) for e in keys[:i]) for i, k in enumerate(keys))
+    return {"n": len(texts), "reply_ratio": sum(p is not None for p in parents) / len(texts), "max_depth": depth,
+            "words_mean": sum(words) / len(words), "words_median": float(pd.Series(words).median()),
+            "words_max": max(words), "short_le5": sum(w <= 5 for w in words) / len(words), "repeats": repeats}
+
+
+def summary(out: str, show: str | None = None) -> int:
+    """Mean per thread of simple statistics, by condition and for the real threads of the same articles."""
+    with open(Path(out) / "threads.jsonl", encoding="utf-8") as f:
+        records = [json.loads(line) for line in f]
+    ok = [r for r in records if r["failed"] is None]
+    rows = [{"condition": r["condition"], **thread_stats([c["text"] for c in r["comments"]],
+                                                         [c["parent"] for c in r["comments"]],
+                                                         max_depth(r["comments"]))} for r in ok]
+    ids = {r["article_id"] for r in ok}
+    comments = pd.read_parquet(PROCESSED_DIR / "comments.parquet", columns=["article_id", "comment_id", "text"])
+    comments["article_id"] = comments["article_id"].astype(str)
+    threads = pd.read_parquet(PROCESSED_DIR / "threads.parquet", columns=["article_id", "reply_ratio", "max_depth_rec"])
+    threads["article_id"] = threads["article_id"].astype(str)
+    for aid, g in comments[comments["article_id"].isin(ids)].groupby("article_id"):
+        th = threads[threads["article_id"] == aid].iloc[0]
+        st = thread_stats(g["text"].tolist(), [None] * len(g), int(th["max_depth_rec"]))
+        rows.append({"condition": "real", **st, "reply_ratio": float(th["reply_ratio"])})
+    table = pd.DataFrame(rows).groupby("condition").mean().round(2)
+    print(f"{len(records)} threads, {len(records) - len(ok)} failed, {sum(r['retries'] for r in records)} retries")
+    print(table.to_string())
+    ex = pd.read_csv(SIM_DIR / "examples.csv", dtype={"comment_id": str}, encoding=CSV_ENCODING)
+    ex_keys = [text_key(x) for x in comments.assign(comment_id=comments["comment_id"].astype(str))
+               .merge(ex, on="comment_id")["text"]]
+    copied = sum(any(near_duplicate(text_key(c["text"]), k) for k in ex_keys)
+                 for r in ok if r["condition"] == "B" for c in r["comments"])
+    print(f"condition B comments repeating a style example: {copied}")
+    for r in ok:
+        if r["article_id"] == show:
+            print(f"\n{show} condition {r['condition']}:")
+            for c in r["comments"][:8]:
+                print(f"  [{c['id']} <- {c['parent']}] {c['text'][:200]}")
     return 0
 
 
@@ -243,8 +305,14 @@ def main(argv=None) -> int:
     r.add_argument("--gpu-memory", type=float, default=GPU_MEMORY)
     r.add_argument("--max-model-len", type=int, default=MAX_MODEL_LEN)
     r.add_argument("--no-schema", action="store_true", help="no constrained JSON decoding")
+    r.add_argument("--repetition-penalty", type=float, default=1.0)
     r.add_argument("--dry-run", action="store_true")
+    s = sub.add_parser("summary", help="per-condition thread statistics of a run next to the real threads")
+    s.add_argument("--out", required=True)
+    s.add_argument("--show", help="print a few comments of this article id")
     a = p.parse_args(argv)
+    if a.command == "summary":
+        return summary(a.out, a.show)
     return download(a.model) if a.command == "download" else run(a)
 
 
