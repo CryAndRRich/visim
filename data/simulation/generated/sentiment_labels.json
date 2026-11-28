@@ -1,8 +1,8 @@
 {
   "data": "data/tasks",
   "seed": 42,
-  "created_at": "2026-11-28T03:27:38+00:00",
-  "git_commit": "bf4cee0",
+  "created_at": "2026-11-28T04:10:03+00:00",
+  "git_commit": "4ebafae",
   "model": "5CD-AI/Vietnamese-Sentiment-visobert",
   "seeds": [
     42,
@@ -24,5 +24,11 @@
     "neu": 0.319,
     "neg": 0.2153
   },
-  "minutes": 2.9
+  "rewrite": {
+    "comments": 1984,
+    "pos": 0.4849,
+    "neu": 0.2802,
+    "neg": 0.2349
+  },
+  "minutes": 2.8
 }

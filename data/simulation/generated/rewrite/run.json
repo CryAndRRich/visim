@@ -1,0 +1,31 @@
+{
+  "data": "data/tasks",
+  "seed": 42,
+  "created_at": "2026-11-28T04:05:46+00:00",
+  "git_commit": "4ebafae",
+  "vllm": "0.33.0",
+  "model": "Qwen/Qwen2.5-7B-Instruct",
+  "temperature": 0.8,
+  "top_p": 0.95,
+  "max_tokens": 6144,
+  "repetition_penalty": 1.0,
+  "chunk": 25,
+  "retries": 52,
+  "schema": true,
+  "conditions": [
+    "A",
+    "C"
+  ],
+  "titles": "data/simulation/rewritten_titles.csv",
+  "threads": 60,
+  "finished_at": "2026-11-28 11:09:57",
+  "minutes": 4.8,
+  "failed": 0,
+  "records": 60,
+  "ids_stripped": 29,
+  "problems_this_run": {
+    "repeats an earlier comment": 293,
+    "invalid json": 2,
+    "non-Vietnamese characters": 1
+  }
+}
