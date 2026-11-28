@@ -11,8 +11,9 @@ Task data lives in data/tasks/<task>/:
                  P(assigned label) for sentiment), 4 decimals; dev items keep their dev label.
     train.csv    public training data, where one exists (clickbait: ViClickbait-2025; incivility:
                  UIT-ViCTSD, toxic comments treated as uncivil). Sentiment uses a pretrained model.
-    corpus.csv   every collected item, to be labelled by the final model (articles for clickbait,
-                 comments for sentiment and incivility).
+    corpus.csv   every collected article, to be labelled by the final model (clickbait only).
+The comment corpus of sentiment and incivility is shared: data/tasks/comments_corpus.csv (id, text,
+parent_text), every collected comment.
 Build them with `python -m src.classifiers.data` after fetching the public data
 (`python scripts/fetch_data.py`).
 """
@@ -65,9 +66,14 @@ def load_train(task: str) -> pd.DataFrame:
     return _read(task_dir(task) / "train.csv")
 
 
+def corpus_path(task: str) -> Path:
+    """Articles for clickbait; one comment corpus shared by sentiment and incivility."""
+    return task_dir(task) / "corpus.csv" if task == "clickbait" else TASKS_DIR / "comments_corpus.csv"
+
+
 def load_corpus(task: str) -> pd.DataFrame:
     """Every collected item to be labelled by the final model: id and content columns."""
-    return _read(task_dir(task) / "corpus.csv")
+    return _read(corpus_path(task))
 
 
 def binary_metrics(y: np.ndarray, score: np.ndarray, pred: np.ndarray) -> dict:

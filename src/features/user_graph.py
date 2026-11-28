@@ -78,7 +78,7 @@ def describe_communities(comments: pd.DataFrame, articles: pd.DataFrame, members
 
 def main(argv=None) -> int:
     parser = argparse.ArgumentParser(description="User-article graph and communities")
-    args = parser.parse_args(argv)
+    parser.parse_args(argv)
     d = PROCESSED_DIR
     comments = pd.read_parquet(d / "comments.parquet", columns=["comment_id", "article_id", "user_hash"])
     articles = pd.read_parquet(d / "articles.parquet", columns=["article_id", "category"])

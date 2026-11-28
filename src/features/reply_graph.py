@@ -161,7 +161,7 @@ def describe(g: nx.DiGraph, cent: pd.DataFrame, users: pd.DataFrame) -> dict:
 
 def main(argv=None) -> int:
     parser = argparse.ArgumentParser(description="Directed reply graph between users")
-    args = parser.parse_args(argv)
+    parser.parse_args(argv)
     d = PROCESSED_DIR
     comments = pd.read_parquet(d / "comments.parquet")
     users = pd.read_parquet(d / "users.parquet")

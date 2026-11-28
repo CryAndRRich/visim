@@ -1,4 +1,4 @@
-"""Build train.csv and corpus.csv of the three tasks in data/tasks/<task>/ (see common.py).
+"""Build train.csv and the corpora of the three tasks in data/tasks/ (see common.py).
 
     clickbait   train: ViClickbait-2025 (id, title, sapo, source, label 0/1)
                 corpus: every article (id = article_id, title, sapo)
@@ -23,7 +23,7 @@ import pandas as pd
 
 from ..processing.snapshot import PROCESSED_DIR
 from ..processing.trees import ROOT as TREE_ROOT, reconstructed_parents
-from .common import CSV_ENCODING, EXTERNAL_DIR, task_dir
+from .common import CSV_ENCODING, EXTERNAL_DIR, TASKS_DIR, corpus_path, task_dir
 
 
 def clickbait_train() -> pd.DataFrame:
@@ -64,20 +64,18 @@ def build() -> dict:
     out = {}
     files = {("clickbait", "train"): clickbait_train(), ("incivility", "train"): incivility_train(),
              ("clickbait", "corpus"): article_corpus()}
-    comments = comment_corpus()
-    files[("sentiment", "corpus")] = comments
-    files[("incivility", "corpus")] = comments
+    files[("sentiment", "corpus")] = comment_corpus()   # shared with incivility
     for (task, name), df in files.items():
-        d = task_dir(task)
-        d.mkdir(parents=True, exist_ok=True)
-        df.to_csv(d / f"{name}.csv", index=False, encoding=CSV_ENCODING)
-        out[f"{task}/{name}.csv"] = int(len(df))
+        path = corpus_path(task) if name == "corpus" else task_dir(task) / f"{name}.csv"
+        path.parent.mkdir(parents=True, exist_ok=True)
+        df.to_csv(path, index=False, encoding=CSV_ENCODING)
+        out[str(path.relative_to(TASKS_DIR))] = int(len(df))
     return out
 
 
 def main(argv=None) -> int:
     p = argparse.ArgumentParser(description="Build train.csv and corpus.csv for the three tasks")
-    a = p.parse_args(argv)
+    p.parse_args(argv)
     for k, v in build().items():
         print(f"{k}: {v} rows")
     return 0

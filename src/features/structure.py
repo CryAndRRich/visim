@@ -85,7 +85,7 @@ def build_threads(articles: pd.DataFrame, comments: pd.DataFrame) -> pd.DataFram
 
 def main(argv=None) -> int:
     parser = argparse.ArgumentParser(description="Structural metrics")
-    args = parser.parse_args(argv)
+    parser.parse_args(argv)
     d = PROCESSED_DIR
     articles = pd.read_parquet(d / "articles.parquet", columns=["article_id", "category", "published_at"])
     comments = pd.read_parquet(d / "comments.parquet")

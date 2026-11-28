@@ -1,0 +1,48 @@
+{
+  "data": "data/tasks",
+  "seed": 42,
+  "created_at": "2026-11-25T04:22:12+00:00",
+  "git_commit": "a146404",
+  "cutoff": "2026-09-30",
+  "min_comments": 15,
+  "articles": 100,
+  "clickbait": 30,
+  "by_category": {
+    "giai-tri": {
+      "articles": 24,
+      "clickbait": 10
+    },
+    "kinh-doanh": {
+      "articles": 19,
+      "clickbait": 5
+    },
+    "phap-luat": {
+      "articles": 17,
+      "clickbait": 3
+    },
+    "the-gioi": {
+      "articles": 24,
+      "clickbait": 10
+    },
+    "thoi-su": {
+      "articles": 16,
+      "clickbait": 2
+    }
+  },
+  "comments_to_generate": 3752,
+  "size_median_max": [
+    27.0,
+    199
+  ],
+  "examples": 50,
+  "retrieval_found": 99,
+  "retrieval_size_gap_median": 1.0,
+  "examples_from_earliest_articles_instead_of_before_cutoff": [
+    "the-gioi",
+    "thoi-su"
+  ],
+  "retrieval_missing": [
+    "5127422"
+  ],
+  "category_mean_not_earlier_only": 4
+}

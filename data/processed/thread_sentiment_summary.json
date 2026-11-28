@@ -1,0 +1,16 @@
+{
+  "threads": 1206,
+  "threads_with_comments": 1070,
+  "p_neg": {
+    "mean": 0.4104,
+    "median": 0.3801
+  },
+  "p_uncivil": {
+    "mean": 0.0262,
+    "median": 0.0
+  },
+  "polarization": {
+    "mean": 0.3447,
+    "median": 0.3109
+  }
+}

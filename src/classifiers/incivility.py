@@ -27,8 +27,9 @@ from sklearn.model_selection import StratifiedKFold
 from sklearn.pipeline import FeatureUnion
 
 from .common import (
-    CSV_ENCODING, RESULTS_DIR, ROOT, SEED, binary_metrics, dev_to_corpus_ids, evaluate_binary, f1_threshold,
-    load_corpus, load_dev, load_train, paired_bootstrap, round_scores, run_info, task_dir, write_results,
+    CSV_ENCODING, RESULTS_DIR, ROOT, SEED, binary_metrics, corpus_path, dev_to_corpus_ids, evaluate_binary,
+    f1_threshold, load_corpus, load_dev, load_train, paired_bootstrap, round_scores, run_info, task_dir,
+    write_results,
 )
 
 TASK = "incivility"
@@ -220,7 +221,8 @@ def timed_tfidf(train: pd.DataFrame, dev: pd.DataFrame, source: str, input_name:
 
 
 def data_hashes() -> dict[str, str]:
-    return {f"{name}_sha256": digest(DATA / f"{name}.csv") for name in INPUT_FILES}
+    return {f"{name}_sha256": digest(corpus_path(TASK) if name == "corpus" else DATA / f"{name}.csv")
+            for name in INPUT_FILES}
 
 
 def local_ladder(initial: bool, jobs: int = 1) -> pd.DataFrame:
@@ -298,7 +300,7 @@ def kaggle_bundle() -> Path:
     train_path = BUNDLE / "incivility_train.csv"
     train.to_csv(train_path, index=False, encoding=CSV_ENCODING)
     for name in ("dev", "corpus"):
-        shutil.copyfile(DATA / f"{name}.csv", BUNDLE / f"incivility_{name}.csv")
+        shutil.copyfile(corpus_path(TASK) if name == "corpus" else DATA / f"{name}.csv", BUNDLE / f"incivility_{name}.csv")
     if data_hashes() != hashes:
         raise ValueError("task data changed while building the GPU bundle")
     write_json(BUNDLE / "incivility_manifest.json", {
